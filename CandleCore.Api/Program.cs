@@ -1,8 +1,10 @@
 using CandleCore.Infrastructure.Configurations;
 using CandleCore.Infrastructure.Handlers.Asset;
 using CandleCore.Infrastructure.Mappers;
+using CandleCore.Infrastructure.Persistence;
 using CandleCore.Infrastructure.Persistence.Repositories;
 using CandleCore.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,12 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CandleCoreDbContext>();
+    db.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
