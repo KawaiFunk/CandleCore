@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Application.Models.Assets;
+namespace CandleCore.Models.Asset;
 
 public class CoinloreAssetModel
 {

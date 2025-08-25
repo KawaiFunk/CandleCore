@@ -1,5 +1,4 @@
-﻿using Application.Models.Assets;
-using CandleCore.Domain.Entities.Asset;
+﻿using CandleCore.Domain.Entities.Asset;
 using CandleCore.Models.Asset;
 
 namespace CandleCore.Mappers;

@@ -14,26 +14,28 @@ public class AssetService(
     IAssetRepository                assetRepository)
     : GenericService<AssetEntity>(repository), IAssetService
 {
-    private readonly IAssetRepository _assetRepository = assetRepository;
-    private readonly IAssetMapper     _mapper          = mapper;
-
     public async Task UpsertAsync(AssetEntity entity)
     {
-        var existingAsset = await _assetRepository.GetByExternalIdAsync(entity.ExternalId);
+        var existingAsset = await assetRepository.GetByExternalIdAsync(entity.ExternalId);
 
         if (existingAsset == null)
         {
-            await _assetRepository.AddAsync(entity);
+            await assetRepository.AddAsync(entity);
         }
         else
         {
-            _mapper.MapToExisting(entity, existingAsset);
-            await _assetRepository.UpdateAsync(existingAsset);
+            mapper.MapToExisting(entity, existingAsset);
+            await assetRepository.UpdateAsync(existingAsset);
         }
+    }
+    
+    public async Task BulkUpsertAsync(IEnumerable<AssetEntity> entities)
+    {
+        await assetRepository.BulkUpsertAsync(entities);
     }
 
     public new async Task<IPagedList<AssetEntity>> GetAllPagedAsync(PagedListFilter filter)
     {
-        return await _assetRepository.GetAllPagedAsync(filter);
+        return await assetRepository.GetAllPagedAsync(filter);
     }
 }
