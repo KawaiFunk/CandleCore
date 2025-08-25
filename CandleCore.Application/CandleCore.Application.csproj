@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>CandleCore</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Handlers\" />
+      <Folder Include="Interfaces\Clients\" />
+      <Folder Include="Interfaces\Repositories\" />
+      <Folder Include="Interfaces\Services\" />
+      <Folder Include="Mappers\" />
+      <Folder Include="Models\" />
+      <Folder Include="Validators\" />
+    </ItemGroup>
+
+</Project>

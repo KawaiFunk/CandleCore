@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="BackgroundJobs\" />
+      <Folder Include="Clients\" />
+      <Folder Include="Configurations\ServiceRegistration\" />
+      <Folder Include="Migrations\" />
+      <Folder Include="Persistence\Repositories\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+</Project>
