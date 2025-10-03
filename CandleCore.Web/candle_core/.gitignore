@@ -1,0 +1,55 @@
+# Misc
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VSCode
+.vscode/
+
+# Flutter / Dart / Pub
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+/coverage/
+**/doc/api/
+**/ios/Flutter/.last_build_id
+
+# Symbolication
+app.*.symbols
+
+# Obfuscation
+app.*.map.json
+
+# Android
+/android/.gradle/
+/android/app/build/
+/android/local.properties
+
+# iOS / macOS
+ios/Pods/
+ios/Runner.xcworkspace/
+macos/Pods/
+*.xcworkspace
+DerivedData/
+
+# Env files (keep local, commit example only)
+.env
+.env.*
+!.env.example
