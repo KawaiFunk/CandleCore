@@ -1,4 +1,5 @@
-﻿using CandleCore.Interfaces.Services.Asset;
+﻿using CandleCore.Domain.Common.PagedList;
+using CandleCore.Interfaces.Services.Asset;
 using CandleCore.Mappers;
 using CandleCore.Models.Asset;
 using Domain.Common.PagedList;

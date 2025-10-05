@@ -1,4 +1,5 @@
-﻿using CandleCore.Infrastructure.Handlers.Asset;
+﻿using CandleCore.Domain.Common.PagedList;
+using CandleCore.Infrastructure.Handlers.Asset;
 using CandleCore.Models.Asset;
 using Domain.Common.PagedList;
 using MediatR;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CandleCore.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/assets")]
 public class AssetController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

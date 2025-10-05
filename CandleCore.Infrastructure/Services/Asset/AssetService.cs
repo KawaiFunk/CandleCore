@@ -1,4 +1,5 @@
-﻿using CandleCore.Domain.Entities.Asset;
+﻿using CandleCore.Domain.Common.PagedList;
+using CandleCore.Domain.Entities.Asset;
 using CandleCore.Infrastructure.Services.Generic;
 using CandleCore.Interfaces.Repositories.Asset;
 using CandleCore.Interfaces.Repositories.Generic;
@@ -28,7 +29,7 @@ public class AssetService(
             await assetRepository.UpdateAsync(existingAsset);
         }
     }
-    
+
     public async Task BulkUpsertAsync(IEnumerable<AssetEntity> entities)
     {
         await assetRepository.BulkUpsertAsync(entities);

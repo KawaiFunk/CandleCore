@@ -1,4 +1,4 @@
-﻿namespace Domain.Common.PagedList;
+﻿namespace CandleCore.Domain.Common.PagedList;
 
 public interface IPagedList<T>
 {

@@ -1,4 +1,6 @@
-﻿namespace Domain.Common.PagedList;
+﻿using CandleCore.Domain.Common.PagedList;
+
+namespace Domain.Common.PagedList;
 
 public class PagedList<T> : IPagedList<T>
 {
