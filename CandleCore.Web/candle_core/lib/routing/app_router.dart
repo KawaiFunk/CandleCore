@@ -1,3 +1,4 @@
+import 'package:candle_core/features/asset_list/presentation/asset_list_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,6 +28,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.onboarding3,
         builder: (context, state) => const OnboardingScreen3(),
       ),
+      GoRoute(
+        path: AppRoutes.assetList,
+        builder: (context, state) => const AssetListScreen(),
+      )
     ],
   );
 });
