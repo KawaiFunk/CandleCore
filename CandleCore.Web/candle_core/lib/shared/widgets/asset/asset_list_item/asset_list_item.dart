@@ -1,0 +1,67 @@
+import 'package:flutter/cupertino.dart';
+
+import '../../../../core/theme/tokens.dart';
+import '../../../../features/asset_list/data/asset_model.dart';
+import '../asset_illustration/asset_illustration.dart';
+
+class AssetListItem extends StatelessWidget {
+  final AssetModel asset;
+
+  const AssetListItem({super.key, required this.asset});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.borderLight, width: 2),
+        borderRadius: BorderRadius.circular(8.0),
+        color: AppColors.surfaceLight,
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AssetIllustration(
+                    text: asset.symbol,
+                    backgroundColor: AppColors.primaryLight.withAlpha(50),
+                    iconColor: AppColors.primary,
+                  ),
+                  SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        asset.name,
+                        style: TextStyle(
+                          fontWeight: AppTypography.fontWeightBold,
+                        ),
+                      ),
+                      Text(
+                        asset.symbol,
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontWeight: AppTypography.fontWeightMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                '\$${asset.priceUsd.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontWeight: AppTypography.fontWeightBold,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/tokens.dart';
+import '../../../shared/widgets/asset/asset_list_item/asset_list_item.dart';
 import '../providers/asset_provider.dart';
 
 class AssetListScreen extends ConsumerStatefulWidget {
@@ -37,81 +38,24 @@ class _AssetListScreenState extends ConsumerState<AssetListScreen> {
         elevation: 0,
       ),
       body: asyncPage.when(
-        data: (paged) => Column(
-          children: [
-            Expanded(
-              child: ListView.separated(
-                itemCount: paged.data.length,
-                separatorBuilder: (_, __) =>
-                    Divider(color: AppColors.borderLight.withOpacity(0.3)),
-                itemBuilder: (context, index) {
-                  final asset = paged.data[index];
-                  final isPositive = asset.percentChange1h >= 0;
-
-                  return ListTile(
-                    title: Text(
-                      asset.name,
-                      style: const TextStyle(
-                        fontWeight: AppTypography.fontWeightMedium,
-                        fontSize: AppTypography.textBase,
-                      ),
-                    ),
-                    subtitle: Text(
-                      asset.symbol,
-                      style: TextStyle(
-                        color: AppColors.textSecondary.withOpacity(0.8),
-                      ),
-                    ),
-                    trailing: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '\$${asset.priceUsd.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontWeight: AppTypography.fontWeightSemiBold,
-                          ),
-                        ),
-                        Text(
-                          '${asset.percentChange1h.toStringAsFixed(2)}%',
-                          style: TextStyle(
-                            color: isPositive
-                                ? AppColors.primaryLight
-                                : AppColors.error,
-                            fontWeight: AppTypography.fontWeightMedium,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+        data: (paged) => Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: paged.pageSize,
+                  itemBuilder: (context, index) {
+                    final asset = paged.data[index];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      child: AssetListItem(asset: asset)
+                    );
+                  },
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: paged.hasPreviousPage ? previousPage : null,
-                    icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                  ),
-                  Text(
-                    'Page ${paged.pageNumber} / ${paged.totalPages}',
-                    style: const TextStyle(
-                      fontWeight: AppTypography.fontWeightMedium,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: paged.hasNextPage
-                        ? () => nextPage(paged.totalPages)
-                        : null,
-                    icon: const Icon(Icons.arrow_forward_ios, size: 18),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
         loading: () =>
             const Center(child: CircularProgressIndicator(strokeWidth: 2)),
