@@ -2,5 +2,5 @@
 
 public static class DatabaseTables
 {
-    public const string Assets = "Assets";
+    public const string Assets = "asset";
 }

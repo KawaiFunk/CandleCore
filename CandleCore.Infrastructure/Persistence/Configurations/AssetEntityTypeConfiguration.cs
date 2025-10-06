@@ -1,5 +1,7 @@
 ﻿using CandleCore.Domain.Entities.Asset;
+using CandleCore.Infrastructure.Helpers;
 using CandleCore.Infrastructure.Persistence.DbConstants;
+using CandleCore.Infrastructure.Persistence.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +11,8 @@ namespace CandleCore.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<AssetEntity> builder)
         {
+            builder.HasAllPropertiesSnakeCase();
+
             builder.ToTable(DatabaseTables.Assets, DatabaseSchemas.Assets);
 
             builder.HasKey(a => a.Id);

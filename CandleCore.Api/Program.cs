@@ -5,19 +5,26 @@ using CandleCore.Infrastructure.Jobs;
 using CandleCore.Infrastructure.Mappers;
 using CandleCore.Infrastructure.Options;
 using CandleCore.Infrastructure.Persistence;
+using CandleCore.Infrastructure.Persistence.MigrationService;
 using CandleCore.Infrastructure.Persistence.Repositories;
 using CandleCore.Infrastructure.Services;
 using CandleCore.Interfaces.Jobs;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddMigrationService(builder.Configuration);
+
 //Add Options
 builder.Services.AddCustomOptions(configuration: builder.Configuration);
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 //Add hangfire jobs
 builder.Services.AddJobs();
@@ -53,6 +60,11 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+}
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CandleCoreDbContext>();
@@ -66,6 +78,12 @@ using (var scope = app.Services.CreateScope())
         Cron.Minutely);
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var migrationService = scope.ServiceProvider.GetRequiredService<MigrationService>();
+    await migrationService.ApplyMigrationsAsync();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -77,6 +95,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHangfireDashboard("/hangfire");
 

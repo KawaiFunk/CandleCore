@@ -2,5 +2,5 @@
 
 public static class DatabaseSchemas
 {
-    public const string Assets = "Assets";
+    public const string Assets = "assets";
 }
