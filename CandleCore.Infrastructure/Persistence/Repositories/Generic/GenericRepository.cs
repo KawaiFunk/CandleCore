@@ -2,7 +2,6 @@
 using CandleCore.Domain.Entities.Generic;
 using CandleCore.Infrastructure.Helpers.PagedList;
 using CandleCore.Interfaces.Repositories.Generic;
-using Domain.Common.PagedList;
 using Microsoft.EntityFrameworkCore;
 
 namespace CandleCore.Infrastructure.Persistence.Repositories.Generic;

@@ -1,6 +1,4 @@
-﻿using CandleCore.Domain.Common.PagedList;
-
-namespace Domain.Common.PagedList;
+﻿namespace CandleCore.Domain.Common.PagedList;
 
 public class PagedList<T> : IPagedList<T>
 {
@@ -10,5 +8,5 @@ public class PagedList<T> : IPagedList<T>
     public int            TotalPages      { get; set; }
     public bool           HasPreviousPage => PageNumber > 1;
     public bool           HasNextPage     => PageNumber < TotalPages;
-    public IEnumerable<T> Data            { get; set; }
+    public IEnumerable<T> Data            { get; set; } = new List<T>();
 }

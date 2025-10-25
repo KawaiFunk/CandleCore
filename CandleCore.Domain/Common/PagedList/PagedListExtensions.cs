@@ -1,6 +1,4 @@
-﻿using CandleCore.Domain.Common.PagedList;
-
-namespace Domain.Common.PagedList;
+﻿namespace CandleCore.Domain.Common.PagedList;
 
 public static class PagedListExtensions
 {

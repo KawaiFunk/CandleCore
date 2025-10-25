@@ -2,7 +2,6 @@
 using CandleCore.Interfaces.Services.Asset;
 using CandleCore.Mappers;
 using CandleCore.Models.Asset;
-using Domain.Common.PagedList;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

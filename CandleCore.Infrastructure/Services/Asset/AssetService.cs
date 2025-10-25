@@ -5,7 +5,6 @@ using CandleCore.Interfaces.Repositories.Asset;
 using CandleCore.Interfaces.Repositories.Generic;
 using CandleCore.Interfaces.Services.Asset;
 using CandleCore.Mappers;
-using Domain.Common.PagedList;
 
 namespace CandleCore.Infrastructure.Services.Asset;
 

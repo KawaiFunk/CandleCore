@@ -1,7 +1,6 @@
 ﻿using CandleCore.Domain.Common.PagedList;
 using CandleCore.Infrastructure.Handlers.Asset;
 using CandleCore.Models.Asset;
-using Domain.Common.PagedList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +17,7 @@ public class AssetController(IMediator mediator) : ControllerBase
     {
         try
         {
-            var request = new GetAllAssetsRequest(filter);
+            var request  = new GetAllAssetsRequest(filter);
             var response = await mediator.Send(request);
 
             return Ok(response);
@@ -36,7 +35,7 @@ public class AssetController(IMediator mediator) : ControllerBase
     {
         try
         {
-            var request = new GetAssetByIdRequest(id);
+            var request  = new GetAssetByIdRequest(id);
             var response = await mediator.Send(request);
 
             return Ok(response);

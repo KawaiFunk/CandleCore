@@ -1,6 +1,5 @@
 ﻿using CandleCore.Domain.Common.PagedList;
 using CandleCore.Domain.Entities.Generic;
-using Domain.Common.PagedList;
 
 namespace CandleCore.Interfaces.Repositories.Generic;
 
