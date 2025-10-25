@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/tokens.dart';
 import '../../../shared/widgets/asset/asset_list_item/asset_list_item.dart';
 import '../providers/asset_provider.dart';
 
@@ -37,29 +36,31 @@ class _AssetListScreenState extends ConsumerState<AssetListScreen> {
         backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
       ),
-      body: asyncPage.when(
-        data: (paged) => Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: paged.pageSize,
-                  itemBuilder: (context, index) {
-                    final asset = paged.data[index];
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      child: AssetListItem(asset: asset)
-                    );
-                  },
+      body: SafeArea(
+        child: asyncPage.when(
+          data: (paged) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: paged.pageSize,
+                    itemBuilder: (context, index) {
+                      final asset = paged.data[index];
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: AssetListItem(asset: asset)
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          loading: () =>
+              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          error: (err, _) => Center(child: Text('Error: $err')),
         ),
-        loading: () =>
-            const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-        error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );
   }

@@ -4,5 +4,9 @@ class AppRoutes {
   static const onboarding2 = '/onboarding2';
   static const onboarding3 = '/onboarding3';
   static const login = '/login';
-  static const assetList = '/asset_list';
+  static const markets = '/markets';
+  static const dashboard = '/dashboard';
+  static const favorites = '/favorites';
+  static const profile = '/profile';
+  static const settings = '/settings';
 }

@@ -20,7 +20,7 @@ class _OnboardingScreen3State extends State<OnboardingScreen3> {
   final int totalPages = 3;
 
   void onNext() {
-    context.go(AppRoutes.assetList);
+    context.go(AppRoutes.markets);
   }
 
   void onPrevious() {
