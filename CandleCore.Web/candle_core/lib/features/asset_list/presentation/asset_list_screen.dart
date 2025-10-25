@@ -28,7 +28,7 @@ class _AssetListScreenState extends ConsumerState<AssetListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final asyncPage = ref.watch(assetListProvider(currentPage));
+    final asyncPage = ref.watch(refreshableAssetListProvider(currentPage));
 
     return Scaffold(
       appBar: AppBar(
@@ -37,31 +37,57 @@ class _AssetListScreenState extends ConsumerState<AssetListScreen> {
         elevation: 0,
       ),
       body: SafeArea(
-        child: asyncPage.when(
-          data: (paged) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: paged.pageSize,
-                    itemBuilder: (context, index) {
-                      final asset = paged.data[index];
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: AssetListItem(asset: asset)
-                      );
-                    },
+        child: RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: asyncPage.when(
+            data: (paged) => ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: paged.pageSize,
+              itemBuilder: (context, index) {
+                final asset = paged.data[index];
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: AssetListItem(asset: asset)
+                );
+              },
+            ),
+            loading: () => const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(strokeWidth: 2),
+                  SizedBox(height: 16),
+                  Text('Loading assets...'),
+                ],
+              ),
+            ),
+            error: (err, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text('Error: $err'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _manualRefresh,
+                    child: const Text('Retry'),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          loading: () =>
-              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-          error: (err, _) => Center(child: Text('Error: $err')),
         ),
       ),
     );
+  }
+
+  void _manualRefresh() {
+    ref.read(assetRefreshProvider.notifier).state++;
+  }
+
+  Future<void> _onRefresh() async {
+    _manualRefresh();
+    return ref.read(refreshableAssetListProvider(currentPage).future);
   }
 }

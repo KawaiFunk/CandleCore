@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/theme/tokens.dart';
 import '../../../../routing/routes.dart';
 
 final selectedBottomNavIndexProvider = StateProvider<int>((ref) => 0);
@@ -66,12 +67,7 @@ class BottomNavBar extends ConsumerWidget {
 
     return Container(
       decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Colors.grey,
-            width: 0.1,
-          ),
-        ),
+        border: Border(top: BorderSide(color: AppColors.borderLight, width: 1)),
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -81,16 +77,32 @@ class BottomNavBar extends ConsumerWidget {
         showUnselectedLabels: true,
         selectedFontSize: 12,
         unselectedFontSize: 10,
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.textSecondary,
+        backgroundColor: AppColors.backgroundLight,
         items: _navItems.map((item) {
           final index = _navItems.indexOf(item);
           final isSelected = index == currentIndex;
 
-          return BottomNavigationBarItem(
-            icon: Icon(
+          final iconWidget = Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? AppColors.primary.withAlpha(50)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
               isSelected && item.activeIcon != null
                   ? item.activeIcon
                   : item.icon,
+              color: isSelected ? AppColors.primary : AppColors.textSecondary,
+              size: 22,
             ),
+          );
+
+          return BottomNavigationBarItem(
+            icon: iconWidget,
             label: item.label,
             tooltip: item.label,
           );
@@ -118,8 +130,8 @@ class BottomNavBar extends ConsumerWidget {
   void _syncWithCurrentRoute(BuildContext context, WidgetRef ref) {
     final currentLocation = GoRouterState.of(context).uri.path;
     final routeIndex = _navItems.indexWhere(
-          (item) =>
-      currentLocation == item.route ||
+      (item) =>
+          currentLocation == item.route ||
           currentLocation.startsWith('${item.route}/'),
     );
 

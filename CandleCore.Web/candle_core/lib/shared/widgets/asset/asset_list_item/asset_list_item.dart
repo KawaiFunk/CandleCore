@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../core/theme/tokens.dart';
 import '../../../../features/asset_list/data/asset_model.dart';
@@ -13,7 +13,7 @@ class AssetListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.borderLight, width: 2),
+        border: Border.all(color: AppColors.borderLight, width: 1),
         borderRadius: BorderRadius.circular(8.0),
         color: AppColors.surfaceLight,
       ),
@@ -52,11 +52,37 @@ class AssetListItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                '\$${asset.priceUsd.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontWeight: AppTypography.fontWeightBold,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '${asset.priceUsd} \$',
+                    style: TextStyle(fontWeight: AppTypography.fontWeightBold),
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        asset.percentChange1h >= 0
+                            ? Icons.trending_up
+                            : Icons.trending_down,
+                        size: 20,
+                        color: asset.percentChange1h >= 0
+                            ? Colors.green
+                            : Colors.red,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '${asset.percentChange1h.abs()} %',
+                        style: TextStyle(
+                          color: asset.percentChange1h >= 0
+                              ? Colors.green
+                              : Colors.red,
+                          fontWeight: AppTypography.fontWeightMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
