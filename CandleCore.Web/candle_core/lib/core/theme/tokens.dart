@@ -53,6 +53,10 @@ class AppColors {
   static const error = Color(0xFFD4183D);
   static const errorForeground = Color(0xFFFFFFFF);
 
+  // Success
+  static const success = Color(0xFF00C36A); // using your primary green
+  static const successForeground = Color(0xFFFFFFFF);
+
   // Chart colors
   static const chart1 = Color(0xFFE74C3C); // approximated from oklch
   static const chart2 = Color(0xFF3498DB);
@@ -119,4 +123,3 @@ class AppTypography {
   static const lineHeightNormal = 1.4;
   static const lineHeightRelaxed = 1.6;
 }
-

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/widgets/asset/asset_list_item/asset_list_item.dart';
+import '../../../shared/widgets/asset/asset_stats_card/asset_stats_card.dart';
 import '../providers/asset_provider.dart';
 
 class AssetListScreen extends ConsumerStatefulWidget {
@@ -32,7 +33,7 @@ class _AssetListScreenState extends ConsumerState<AssetListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Assets'),
+        title: const Text('Markets'),
         backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
       ),
@@ -40,17 +41,31 @@ class _AssetListScreenState extends ConsumerState<AssetListScreen> {
         child: RefreshIndicator(
           onRefresh: _onRefresh,
           child: asyncPage.when(
-            data: (paged) => ListView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: paged.pageSize,
-              itemBuilder: (context, index) {
-                final asset = paged.data[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: AssetListItem(asset: asset)
-                );
-              },
-            ),
+            data: (paged) {
+              final stats = AssetStats.fromAssets(paged.data);
+              
+              return CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: AssetStatsCard(stats: stats),
+                  ),
+                  
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    sliver: SliverList.builder(
+                      itemCount: paged.pageSize,
+                      itemBuilder: (context, index) {
+                        final asset = paged.data[index];
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: AssetListItem(asset: asset),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
             loading: () => const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

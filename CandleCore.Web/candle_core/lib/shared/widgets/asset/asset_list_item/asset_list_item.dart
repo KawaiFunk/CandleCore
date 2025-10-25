@@ -16,6 +16,13 @@ class AssetListItem extends StatelessWidget {
         border: Border.all(color: AppColors.borderLight, width: 1),
         borderRadius: BorderRadius.circular(8.0),
         color: AppColors.surfaceLight,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(15),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ]
       ),
       padding: const EdgeInsets.all(12),
       child: Column(
