@@ -72,11 +72,13 @@ flutter run
 
 ## Structura aplicației
 
+```
 CandleCore/
 ├── CandleCore.Domain/
 ├── CandleCore.Application/
 ├── CandleCore.Infrastructure/
 ├── CandleCore.Api/
 └── CandleCore.Web/
+```
 
 Arhitectură: Clean Architecture (Domain → Application → Infrastructure → Api)
