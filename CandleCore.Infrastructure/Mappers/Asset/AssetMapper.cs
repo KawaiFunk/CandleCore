@@ -10,6 +10,7 @@ public class AssetMapper : IAssetMapper
     {
         return new AssetModel
         {
+            Id              = entity.Id,
             Name            = entity.Name,
             Symbol          = entity.Symbol,
             PriceUsd        = entity.PriceUsd,
