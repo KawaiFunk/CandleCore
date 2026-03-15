@@ -102,7 +102,7 @@ class _AssetListScreenState extends ConsumerState<AssetListScreen> {
                           .setPage(filter.page + 1),
                     ),
                   ),
-                const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.lg)),
+                const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.sm)),
               ],
             ],
           ),
