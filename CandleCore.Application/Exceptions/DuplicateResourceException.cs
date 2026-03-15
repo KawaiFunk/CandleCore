@@ -1,4 +1,4 @@
-namespace CandleCore.Application.Exceptions;
+namespace CandleCore.Exceptions;
 
 public class DuplicateResourceException(string resourceName, string field, object value)
     : AppException($"{resourceName} with {field} '{value}' already exists.", ErrorCodes.DuplicateResource)

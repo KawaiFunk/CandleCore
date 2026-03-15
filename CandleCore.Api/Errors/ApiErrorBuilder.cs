@@ -1,5 +1,5 @@
-using CandleCore.Application.Exceptions;
-using CandleCore.Application.Models.Common;
+using CandleCore.Exceptions;
+using CandleCore.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CandleCore.Api.Errors;
@@ -15,8 +15,7 @@ public static class ApiErrorBuilder
         _                             => InternalError(ex),
     };
 
-    private static ObjectResult Unauthorized(AppException ex) =>
-        new(Error(ex)) { StatusCode = StatusCodes.Status401Unauthorized };
+    private static ObjectResult Unauthorized(AppException ex) => new ObjectResult(Error(ex)) { StatusCode = StatusCodes.Status401Unauthorized };
 
     private static ObjectResult NotFound(AppException ex) =>
         new(Error(ex)) { StatusCode = StatusCodes.Status404NotFound };

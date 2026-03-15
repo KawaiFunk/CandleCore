@@ -1,4 +1,4 @@
-namespace CandleCore.Application.Exceptions;
+namespace CandleCore.Exceptions;
 
 public class ResourceNotFoundException(string resourceName, object key)
     : AppException($"{resourceName} with key '{key}' was not found.", ErrorCodes.NotFound)

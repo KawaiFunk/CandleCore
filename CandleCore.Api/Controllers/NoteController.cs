@@ -1,6 +1,6 @@
 using CandleCore.Api.Errors;
-using CandleCore.Application.Models.Common;
 using CandleCore.Infrastructure.Handlers.Note;
+using CandleCore.Models.Common;
 using CandleCore.Models.Note;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

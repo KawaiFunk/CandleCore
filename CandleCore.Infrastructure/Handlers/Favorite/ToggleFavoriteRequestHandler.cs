@@ -1,4 +1,4 @@
-using CandleCore.Application.Exceptions;
+using CandleCore.Exceptions;
 using CandleCore.Interfaces.Repositories.Favorite;
 using CandleCore.Interfaces.Services.Asset;
 using MediatR;

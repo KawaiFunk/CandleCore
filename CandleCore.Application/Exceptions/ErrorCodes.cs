@@ -1,4 +1,4 @@
-namespace CandleCore.Application.Exceptions;
+namespace CandleCore.Exceptions;
 
 public static class ErrorCodes
 {

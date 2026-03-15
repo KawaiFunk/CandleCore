@@ -54,24 +54,6 @@ public class AssetMapper : IAssetMapper
         };
     }
 
-    public CoinloreAssetModel ToCoinloreModel(AssetEntity entity)
-    {
-        return new CoinloreAssetModel
-        {
-            Id               = entity.ExternalId,
-            Symbol           = entity.Symbol,
-            Name             = entity.Name,
-            Rank             = entity.Rank,
-            PriceUsd         = entity.PriceUsd.ToString(),
-            PercentChange24h = entity.PercentChange24h.ToString(),
-            PercentChange1h  = entity.PercentChange1h.ToString(),
-            PercentChange7d  = entity.PercentChange7d.ToString(),
-            PriceBtc         = entity.PriceBtc.ToString(),
-            MarketCapUsd     = entity.MarketCapUsd.ToString(),
-            Volume24a        = entity.Volume24a
-        };
-    }
-
     public void MapToExisting(AssetEntity source, AssetEntity target)
     {
         target.Rank             = source.Rank;

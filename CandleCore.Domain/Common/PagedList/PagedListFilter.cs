@@ -1,4 +1,4 @@
-namespace CandleCore.Domain.Common.PagedList;
+﻿namespace CandleCore.Domain.Common.PagedList;
 
 public class PagedListFilter
 {

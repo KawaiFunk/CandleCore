@@ -7,7 +7,7 @@ namespace CandleCore.Interfaces.Repositories.Asset;
 
 public interface IAssetRepository : IGenericRepository<AssetEntity>
 {
-    Task<AssetEntity?>          GetByExternalIdAsync(string              externalId);
-    Task                        BulkUpsertAsync(IEnumerable<AssetEntity> entities);
-    Task<IPagedList<AssetEntity>> GetAllPagedAsync(AssetFilter           filter);
+    Task<AssetEntity?>            GetByExternalIdAsync(string              externalId);
+    Task                          BulkUpsertAsync(IEnumerable<AssetEntity> entities);
+    Task<IPagedList<AssetEntity>> GetAllPagedAsync(AssetFilter             filter);
 }

@@ -1,4 +1,4 @@
-namespace CandleCore.Models.Asset;
+﻿namespace CandleCore.Models.Asset;
 
 public class BaseAssetModel
 {

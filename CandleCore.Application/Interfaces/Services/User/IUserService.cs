@@ -6,6 +6,6 @@ namespace CandleCore.Interfaces.Services.User;
 
 public interface IUserService : IGenericService<UserEntity>
 {
-    Task<UserModel>  RegisterAsync(RegisterRequest request);
-    Task<UserModel> LoginAsync(LoginRequest request);
+    Task<UserModel> RegisterAsync(RegisterRequest request);
+    Task<UserModel> LoginAsync(LoginRequest       request);
 }

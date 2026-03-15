@@ -7,7 +7,7 @@ namespace CandleCore.Interfaces.Services.Asset;
 
 public interface IAssetService : IGenericService<AssetEntity>
 {
-    Task UpsertAsync(AssetEntity                              entity);
-    Task BulkUpsertAsync(IEnumerable<AssetEntity>            entities);
-    Task<IPagedList<AssetEntity>> GetAllPagedAsync(AssetFilter filter);
+    Task                          UpsertAsync(AssetEntity                  entity);
+    Task                          BulkUpsertAsync(IEnumerable<AssetEntity> entities);
+    Task<IPagedList<AssetEntity>> GetAllPagedAsync(AssetFilter             filter);
 }

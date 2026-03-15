@@ -1,4 +1,4 @@
-using CandleCore.Application.Exceptions;
+using CandleCore.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

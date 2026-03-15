@@ -1,4 +1,4 @@
-namespace CandleCore.Application.Models.Common;
+namespace CandleCore.Models.Common;
 
 public class ApiErrorModel
 {

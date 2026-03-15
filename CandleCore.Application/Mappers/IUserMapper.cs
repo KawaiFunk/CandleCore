@@ -5,6 +5,6 @@ namespace CandleCore.Mappers;
 
 public interface IUserMapper
 {
-    UserModel  Map(UserEntity      entity);
+    UserModel  Map(UserEntity           entity);
     UserEntity ToEntity(RegisterRequest request, string hashedPassword);
 }

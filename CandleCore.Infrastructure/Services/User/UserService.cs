@@ -1,5 +1,5 @@
-using CandleCore.Application.Exceptions;
 using CandleCore.Domain.Entities.User;
+using CandleCore.Exceptions;
 using CandleCore.Infrastructure.Services.Generic;
 using CandleCore.Interfaces.Repositories.Generic;
 using CandleCore.Interfaces.Repositories.User;
