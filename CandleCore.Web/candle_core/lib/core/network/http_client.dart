@@ -31,6 +31,16 @@ class ApiHttpClient {
     return _handle(response);
   }
 
+  Future<dynamic> patch(String path, {Map<String, dynamic>? body}) async {
+    final uri = Uri.parse('$baseUrl$path');
+    final response = await http.patch(
+      uri,
+      headers: _headers(),
+      body: body != null ? jsonEncode(body) : null,
+    );
+    return _handle(response);
+  }
+
   Map<String, String> _headers() => {'Content-Type': 'application/json'};
 
   dynamic _handle(http.Response response) {

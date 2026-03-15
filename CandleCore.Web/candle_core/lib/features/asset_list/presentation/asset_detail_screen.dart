@@ -6,6 +6,8 @@ import '../../../core/theme/tokens.dart';
 import '../../../features/favorites/providers/favorites_provider.dart';
 import '../../../features/notes/presentation/widgets/quick_note_sheet.dart';
 import '../../../features/notes/providers/notes_provider.dart';
+import '../../../features/triggers/presentation/widgets/quick_trigger_sheet.dart';
+import '../../../features/triggers/providers/triggers_provider.dart';
 import '../data/detailed_asset_model.dart';
 import '../providers/asset_provider.dart';
 import 'widgets/change_section.dart';
@@ -94,6 +96,26 @@ class _DetailViewState extends ConsumerState<_DetailView> {
     );
   }
 
+  void _showQuickTriggerSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => QuickTriggerSheet(
+        assetId: widget.asset.id,
+        assetName: widget.asset.name,
+        assetSymbol: widget.asset.symbol,
+        onSave: (condition, targetPrice) async {
+          await ref.read(triggersProvider.notifier).create(
+                assetId: widget.asset.id,
+                condition: condition,
+                targetPrice: targetPrice,
+              );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -115,6 +137,7 @@ class _DetailViewState extends ConsumerState<_DetailView> {
             onFavoriteTap: () =>
                 ref.read(favoritesProvider.notifier).toggle(widget.asset.id),
             onAddNoteTap: _showAddNoteSheet,
+            onAddTriggerTap: _showQuickTriggerSheet,
           ),
           SliverToBoxAdapter(
             child: Padding(

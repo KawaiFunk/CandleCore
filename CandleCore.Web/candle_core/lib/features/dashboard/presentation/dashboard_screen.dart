@@ -9,8 +9,11 @@ import '../../../shared/widgets/common/section_header.dart';
 import '../../asset_list/data/asset_model.dart';
 import '../../asset_list/providers/asset_provider.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../triggers/presentation/widgets/add_trigger_sheet.dart';
+import '../../triggers/providers/triggers_provider.dart';
 import '../widgets/market_summary_card.dart';
 import '../widgets/mover_card.dart';
+import '../widgets/trigger_preview_card.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -109,13 +112,30 @@ class DashboardScreen extends ConsumerWidget {
   }
 }
 
-class _DashboardContent extends StatelessWidget {
+class _DashboardContent extends ConsumerWidget {
   final List<AssetModel> assets;
 
   const _DashboardContent({required this.assets});
 
+  void _showAddTriggerSheet(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => AddTriggerSheet(
+        onSave: (assetId, condition, targetPrice) async {
+          await ref.read(triggersProvider.notifier).create(
+                assetId: assetId,
+                condition: condition,
+                targetPrice: targetPrice,
+              );
+        },
+      ),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final gainers = [...assets]
       ..sort((a, b) => b.percentChange1h.compareTo(a.percentChange1h));
     final losers = [...assets]
@@ -131,6 +151,13 @@ class _DashboardContent extends StatelessWidget {
         ? 0.0
         : assets.map((a) => a.percentChange1h).reduce((a, b) => a + b) /
             assets.length;
+
+    final triggersAsync = ref.watch(triggersProvider);
+    final activeAlerts = triggersAsync.value
+            ?.where((t) => t.isActive)
+            .take(3)
+            .toList() ??
+        [];
 
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -164,51 +191,66 @@ class _DashboardContent extends StatelessWidget {
               child: MoverCard(asset: a),
             )),
         const SizedBox(height: AppSpacing.lg),
-        SectionHeader(title: 'Price Alerts'),
-        const SizedBox(height: AppSpacing.sm),
-        _PlaceholderCard(
-          icon: Icons.notifications_none,
-          message: 'No active alerts. Set up alerts to get notified.',
+        SectionHeader(
+          title: 'Price Alerts',
+          actionLabel: 'See all',
+          onAction: () => context.go(AppRoutes.triggers),
         ),
+        const SizedBox(height: AppSpacing.sm),
+        if (activeAlerts.isEmpty)
+          _EmptyAlertsCard(
+            onAddTap: () => _showAddTriggerSheet(context, ref),
+          )
+        else
+          ...activeAlerts.map((t) => Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                child: TriggerPreviewCard(
+                  trigger: t,
+                  onToggle: () =>
+                      ref.read(triggersProvider.notifier).toggle(t.id),
+                ),
+              )),
         const SizedBox(height: AppSpacing.lg),
       ],
     );
   }
 }
 
-class _PlaceholderCard extends StatelessWidget {
-  final IconData icon;
-  final String message;
+class _EmptyAlertsCard extends StatelessWidget {
+  final VoidCallback onAddTap;
 
-  const _PlaceholderCard({required this.icon, required this.message});
+  const _EmptyAlertsCard({required this.onAddTap});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.cardDark : AppColors.cardLight,
-        borderRadius: BorderRadius.circular(AppRadii.xl),
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+    return GestureDetector(
+      onTap: onAddTap,
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.cardDark : AppColors.cardLight,
+          borderRadius: BorderRadius.circular(AppRadii.xl),
+          border: Border.all(
+            color: isDark ? AppColors.borderDark : AppColors.borderLight,
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: AppColors.textSecondary, size: 24),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Text(
-              message,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: AppTypography.textSm,
+        child: Row(
+          children: [
+            const Icon(Icons.notifications_none, color: AppColors.textSecondary, size: 24),
+            const SizedBox(width: AppSpacing.md),
+            const Expanded(
+              child: Text(
+                'No active alerts. Tap to set one up.',
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: AppTypography.textSm,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

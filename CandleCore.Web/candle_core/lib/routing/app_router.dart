@@ -5,10 +5,12 @@ import 'package:candle_core/features/favorites/presentation/favorites_screen.dar
 import 'package:candle_core/features/notes/presentation/notes_screen.dart';
 import 'package:candle_core/features/settings/presentation/settings_screen.dart';
 import 'package:candle_core/features/main_shell/presentation/pages/main_shell.dart';
+import 'package:candle_core/features/triggers/presentation/triggers_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/providers/preferences_provider.dart';
+import '../core/services/notification_banner_service.dart';
 import '../features/asset_list/presentation/asset_detail_screen.dart';
 import '../features/asset_list/presentation/asset_list_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
@@ -19,6 +21,7 @@ import 'routes.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
+    navigatorKey: NotificationBannerService().navigatorKey,
     initialLocation: AppRoutes.splash,
     redirect: (context, state) {
       final isLoggedIn = ref.read(currentUserProvider) != null;
@@ -33,6 +36,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         AppRoutes.favorites,
         AppRoutes.notes,
         AppRoutes.settings,
+        AppRoutes.triggers,
       ];
       final isProtected = protectedRoutes.any(
         (r) => path == r || path.startsWith('$r/'),
@@ -107,6 +111,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.settings,
             builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.triggers,
+            builder: (context, state) => const TriggersScreen(),
           ),
         ],
       ),

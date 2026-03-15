@@ -13,6 +13,7 @@ class DetailAppBar extends StatelessWidget {
   final bool isDark;
   final VoidCallback onFavoriteTap;
   final VoidCallback onAddNoteTap;
+  final VoidCallback onAddTriggerTap;
 
   const DetailAppBar({
     super.key,
@@ -23,6 +24,7 @@ class DetailAppBar extends StatelessWidget {
     required this.isDark,
     required this.onFavoriteTap,
     required this.onAddNoteTap,
+    required this.onAddTriggerTap,
   });
 
   @override
@@ -41,6 +43,11 @@ class DetailAppBar extends StatelessWidget {
         onPressed: () => Navigator.of(context).pop(),
       ),
       actions: [
+        IconButton(
+          icon: const Icon(Icons.add_alert_outlined, size: 22),
+          color: AppColors.textSecondary,
+          onPressed: onAddTriggerTap,
+        ),
         IconButton(
           icon: const Icon(Icons.sticky_note_2_outlined, size: 22),
           color: AppColors.textSecondary,

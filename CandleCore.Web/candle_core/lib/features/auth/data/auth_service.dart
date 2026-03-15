@@ -20,4 +20,11 @@ class AuthService {
     final json = await _client.post('/api/users/login', body: request.toJson());
     return UserModel.fromJson(json as Map<String, dynamic>);
   }
+
+  Future<void> registerDeviceToken(int userId, String token) async {
+    await _client.post(
+      '/api/users/$userId/device-token',
+      body: {'token': token},
+    );
+  }
 }

@@ -10,6 +10,7 @@ class AppRoutes {
   static const favorites = '/favorites';
   static const notes = '/notes';
   static const settings = '/settings';
+  static const triggers = '/triggers';
 
   static String assetDetailPath(int id) => '/markets/$id';
 }
