@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/network/api_exception.dart';
 import '../../../core/theme/tokens.dart';
 import '../../../routing/routes.dart';
 import '../../../shared/widgets/common/app_text_field.dart';
@@ -197,8 +198,10 @@ class _LoginFormState extends ConsumerState<_LoginForm> {
       ));
       ref.read(currentUserProvider.notifier).setUser(user);
       if (mounted) context.go(AppRoutes.dashboard);
+    } on ApiException catch (e) {
+      setState(() => _errorMessage = e.message);
     } catch (_) {
-      setState(() => _errorMessage = 'Invalid username or password.');
+      setState(() => _errorMessage = 'An unexpected error occurred.');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -325,9 +328,10 @@ class _RegisterFormState extends ConsumerState<_RegisterForm> {
       ));
       ref.read(currentUserProvider.notifier).setUser(user);
       if (mounted) context.go(AppRoutes.dashboard);
-    } catch (e) {
-      setState(() =>
-          _errorMessage = e.toString().replaceFirst('Exception: ', ''));
+    } on ApiException catch (e) {
+      setState(() => _errorMessage = e.message);
+    } catch (_) {
+      setState(() => _errorMessage = 'An unexpected error occurred.');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

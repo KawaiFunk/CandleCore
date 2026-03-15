@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/network/api_exception.dart';
 import '../../../core/theme/tokens.dart';
 import '../../../shared/widgets/asset/asset_list_item/asset_list_item.dart';
 import '../../../shared/widgets/common/pagination_bar.dart';
@@ -174,9 +175,10 @@ class _AssetListScreenState extends ConsumerState<AssetListScreen> {
               const Icon(Icons.error_outline,
                   size: 48, color: AppColors.error),
               const SizedBox(height: AppSpacing.md),
-              const Text(
-                'Failed to load markets',
-                style: TextStyle(color: AppColors.textSecondary),
+              Text(
+                err is ApiException ? err.message : 'Failed to load markets.',
+                style: const TextStyle(color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.md),
               TextButton(

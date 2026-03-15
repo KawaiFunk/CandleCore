@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/network/api_exception.dart';
 import '../../../core/theme/tokens.dart';
 import '../../../routing/routes.dart';
 import '../../../shared/widgets/common/section_header.dart';
@@ -80,8 +81,11 @@ class DashboardScreen extends ConsumerWidget {
                 const Icon(Icons.error_outline,
                     size: 48, color: AppColors.error),
                 const SizedBox(height: AppSpacing.md),
-                Text('Failed to load market data',
-                    style: const TextStyle(color: AppColors.textSecondary)),
+                Text(
+                  err is ApiException ? err.message : 'Failed to load market data.',
+                  style: const TextStyle(color: AppColors.textSecondary),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () =>
