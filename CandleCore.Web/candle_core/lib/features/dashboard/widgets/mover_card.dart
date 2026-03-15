@@ -1,37 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/theme/tokens.dart';
+import '../../asset_list/data/asset_model.dart';
+import '../../../shared/widgets/asset/asset_illustration/asset_illustration.dart';
 
-import '../../../../core/theme/tokens.dart';
-import '../../../../features/asset_list/data/asset_model.dart';
-import '../../../../features/favorites/providers/favorites_provider.dart';
-import '../asset_illustration/asset_illustration.dart';
-
-class AssetListItem extends ConsumerWidget {
+class MoverCard extends StatelessWidget {
   final AssetModel asset;
 
-  const AssetListItem({super.key, required this.asset});
+  const MoverCard({super.key, required this.asset});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isFavorite = ref.watch(
-      favoritesProvider.select((s) => s.contains(asset.symbol)),
-    );
     final isPositive = asset.percentChange1h >= 0;
     final changeColor = isPositive ? AppColors.primary : AppColors.error;
 
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(AppRadii.xl),
-        color: isDark ? AppColors.cardDark : AppColors.cardLight,
-      ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.sm + 4,
+      ),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.cardDark : AppColors.cardLight,
+        borderRadius: BorderRadius.circular(AppRadii.xl),
+        border: Border.all(
+          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+        ),
       ),
       child: Row(
         children: [
@@ -103,16 +96,6 @@ class AssetListItem extends ConsumerWidget {
                 ),
               ),
             ],
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          GestureDetector(
-            onTap: () =>
-                ref.read(favoritesProvider.notifier).toggle(asset.symbol),
-            child: Icon(
-              isFavorite ? Icons.star_rounded : Icons.star_border_rounded,
-              color: isFavorite ? AppColors.primary : AppColors.textSecondary,
-              size: 22,
-            ),
           ),
         ],
       ),

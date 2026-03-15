@@ -7,6 +7,6 @@ class AppRoutes {
   static const markets = '/markets';
   static const dashboard = '/dashboard';
   static const favorites = '/favorites';
-  static const profile = '/profile';
+  static const notes = '/notes';
   static const settings = '/settings';
 }

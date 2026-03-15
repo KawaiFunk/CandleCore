@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/theme/tokens.dart';
 import '../../../shared/widgets/asset/asset_list_item/asset_list_item.dart';
-import '../../../shared/widgets/asset/asset_stats_card/asset_stats_card.dart';
+import '../../../shared/widgets/common/pagination_bar.dart';
 import '../providers/asset_provider.dart';
 
 class AssetListScreen extends ConsumerStatefulWidget {
@@ -13,96 +16,180 @@ class AssetListScreen extends ConsumerStatefulWidget {
 }
 
 class _AssetListScreenState extends ConsumerState<AssetListScreen> {
-  int currentPage = 1;
+  final _searchController = TextEditingController();
+  Timer? _debounce;
 
-  void nextPage(int totalPages) {
-    if (currentPage < totalPages) {
-      setState(() => currentPage++);
-    }
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _debounce?.cancel();
+    super.dispose();
   }
 
-  void previousPage() {
-    if (currentPage > 1) {
-      setState(() => currentPage--);
-    }
+  void _onSearchChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 400), () {
+      ref.read(assetListFilterProvider.notifier).setSearch(value);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final asyncPage = ref.watch(refreshableAssetListProvider(currentPage));
+    final filter = ref.watch(assetListFilterProvider);
+    final assetsAsync = ref.watch(pagedAssetListProvider(filter));
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Markets'),
-        backgroundColor: Theme.of(context).cardColor,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _onRefresh,
-          child: asyncPage.when(
-            data: (paged) {
-              final stats = AssetStats.fromAssets(paged.data);
-              
-              return CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: AssetStatsCard(stats: stats),
-                  ),
-                  
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    sliver: SliverList.builder(
-                      itemCount: paged.pageSize,
-                      itemBuilder: (context, index) {
-                        final asset = paged.data[index];
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: AssetListItem(asset: asset),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
-            loading: () => const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(strokeWidth: 2),
-                  SizedBox(height: 16),
-                  Text('Loading assets...'),
-                ],
-              ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(64),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              0,
+              AppSpacing.md,
+              AppSpacing.md,
             ),
-            error: (err, _) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text('Error: $err'),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _manualRefresh,
-                    child: const Text('Retry'),
-                  ),
-                ],
+            child: TextField(
+              controller: _searchController,
+              onChanged: _onSearchChanged,
+              style: TextStyle(
+                fontSize: AppTypography.textBase,
+                color: isDark ? AppColors.textLight : AppColors.textPrimary,
+              ),
+              decoration: InputDecoration(
+                hintText: 'Search coins...',
+                hintStyle:
+                    const TextStyle(color: AppColors.textSecondary),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: AppColors.textSecondary,
+                  size: 20,
+                ),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.close,
+                            color: AppColors.textSecondary, size: 18),
+                        onPressed: () {
+                          _searchController.clear();
+                          ref
+                              .read(assetListFilterProvider.notifier)
+                              .setSearch('');
+                        },
+                      )
+                    : null,
+                filled: true,
+                fillColor: isDark
+                    ? AppColors.inputBackgroundDark
+                    : AppColors.inputBackgroundLight,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadii.lg),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadii.lg),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadii.lg),
+                  borderSide: const BorderSide(
+                      color: AppColors.primary, width: 1.5),
+                ),
               ),
             ),
           ),
         ),
       ),
+      body: assetsAsync.when(
+        data: (paged) {
+          if (paged.data.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.search_off,
+                      size: 48, color: AppColors.textSecondary),
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    filter.search.isEmpty
+                        ? 'No assets found'
+                        : 'No results for "${filter.search}"',
+                    style: const TextStyle(color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return RefreshIndicator(
+            color: AppColors.primary,
+            onRefresh: () async {
+              ref.read(assetRefreshProvider.notifier).refresh();
+              await ref.read(pagedAssetListProvider(filter).future);
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    itemCount: paged.data.length,
+                    separatorBuilder: (_, __) =>
+                        const SizedBox(height: AppSpacing.sm),
+                    itemBuilder: (context, index) =>
+                        AssetListItem(asset: paged.data[index]),
+                  ),
+                ),
+                if (paged.totalPages > 1)
+                  PaginationBar(
+                    currentPage: paged.pageNumber,
+                    totalPages: paged.totalPages,
+                    hasPrevious: paged.hasPreviousPage,
+                    hasNext: paged.hasNextPage,
+                    onPrevious: () => ref
+                        .read(assetListFilterProvider.notifier)
+                        .setPage(filter.page - 1),
+                    onNext: () => ref
+                        .read(assetListFilterProvider.notifier)
+                        .setPage(filter.page + 1),
+                  ),
+              ],
+            ),
+          );
+        },
+        loading: () => const Center(
+          child: CircularProgressIndicator(
+            color: AppColors.primary,
+            strokeWidth: 2,
+          ),
+        ),
+        error: (err, _) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline,
+                  size: 48, color: AppColors.error),
+              const SizedBox(height: AppSpacing.md),
+              const Text(
+                'Failed to load markets',
+                style: TextStyle(color: AppColors.textSecondary),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              TextButton(
+                onPressed: () =>
+                    ref.read(assetRefreshProvider.notifier).refresh(),
+                child: const Text('Retry',
+                    style: TextStyle(color: AppColors.primary)),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
-
-  void _manualRefresh() {
-    ref.read(assetRefreshProvider.notifier).state++;
-  }
-
-  Future<void> _onRefresh() async {
-    _manualRefresh();
-    return ref.read(refreshableAssetListProvider(currentPage).future);
-  }
 }
+

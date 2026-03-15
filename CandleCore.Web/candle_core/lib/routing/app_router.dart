@@ -1,11 +1,15 @@
-// dart
-import 'package:candle_core/features/asset_list/presentation/asset_list_screen.dart';
+import 'package:candle_core/features/auth/presentation/auth_screen.dart';
+import 'package:candle_core/features/auth/providers/auth_provider.dart';
+import 'package:candle_core/features/dashboard/presentation/dashboard_screen.dart';
+import 'package:candle_core/features/favorites/presentation/favorites_screen.dart';
+import 'package:candle_core/features/notes/presentation/notes_screen.dart';
+import 'package:candle_core/features/settings/presentation/settings_screen.dart';
 import 'package:candle_core/features/main_shell/presentation/pages/main_shell.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter/services.dart';
 
+import '../core/providers/preferences_provider.dart';
+import '../features/asset_list/presentation/asset_list_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/splash/presentation/onboarding_screen_1.dart';
 import '../features/splash/presentation/onboarding_screen_2.dart';
@@ -15,6 +19,41 @@ import 'routes.dart';
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.splash,
+    redirect: (context, state) {
+      final isLoggedIn = ref.read(currentUserProvider) != null;
+      final prefs = ref.read(preferencesServiceProvider);
+      final onboardingDone = prefs.onboardingDone;
+
+      final path = state.uri.path;
+
+      final protectedRoutes = [
+        AppRoutes.dashboard,
+        AppRoutes.markets,
+        AppRoutes.favorites,
+        AppRoutes.notes,
+        AppRoutes.settings,
+      ];
+      final isProtected = protectedRoutes.any(
+        (r) => path == r || path.startsWith('$r/'),
+      );
+
+      if (isProtected && !isLoggedIn) return AppRoutes.login;
+
+      if (path == AppRoutes.splash && onboardingDone) {
+        return isLoggedIn ? AppRoutes.dashboard : AppRoutes.login;
+      }
+
+      final onboardingRoutes = [
+        AppRoutes.onboarding1,
+        AppRoutes.onboarding2,
+        AppRoutes.onboarding3,
+      ];
+      if (onboardingRoutes.contains(path) && onboardingDone) {
+        return isLoggedIn ? AppRoutes.dashboard : AppRoutes.login;
+      }
+
+      return null;
+    },
     routes: [
       GoRoute(
         path: AppRoutes.splash,
@@ -34,25 +73,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Login Screen')),
-        ),
+        builder: (context, state) => const AuthScreen(),
       ),
-
       ShellRoute(
         builder: (context, state, child) => MainShell(child: child),
         routes: [
           GoRoute(
             path: AppRoutes.dashboard,
-            builder: (context, state) => Scaffold(
-              appBar: AppBar(
-                title: const Text('Dashboard'),
-                systemOverlayStyle: SystemUiOverlayStyle.dark,
-              ),
-              body: const SafeArea(
-                child: Center(child: Text('Dashboard Screen')),
-              ),
-            ),
+            builder: (context, state) => const DashboardScreen(),
           ),
           GoRoute(
             path: AppRoutes.markets,
@@ -60,39 +88,15 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: AppRoutes.favorites,
-            builder: (context, state) => Scaffold(
-              appBar: AppBar(
-                title: const Text('Favorites'),
-                systemOverlayStyle: SystemUiOverlayStyle.dark,
-              ),
-              body: const SafeArea(
-                child: Center(child: Text('Favorites Screen')),
-              ),
-            ),
+            builder: (context, state) => const FavoritesScreen(),
           ),
           GoRoute(
-            path: AppRoutes.profile,
-            builder: (context, state) => Scaffold(
-              appBar: AppBar(
-                title: const Text('Profile'),
-                systemOverlayStyle: SystemUiOverlayStyle.dark,
-              ),
-              body: const SafeArea(
-                child: Center(child: Text('Profile Screen')),
-              ),
-            ),
+            path: AppRoutes.notes,
+            builder: (context, state) => const NotesScreen(),
           ),
           GoRoute(
             path: AppRoutes.settings,
-            builder: (context, state) => Scaffold(
-              appBar: AppBar(
-                title: const Text('Settings'),
-                systemOverlayStyle: SystemUiOverlayStyle.dark,
-              ),
-              body: const SafeArea(
-                child: Center(child: Text('Settings Screen')),
-              ),
-            ),
+            builder: (context, state) => const SettingsScreen(),
           ),
         ],
       ),

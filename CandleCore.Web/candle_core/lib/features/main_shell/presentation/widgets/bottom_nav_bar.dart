@@ -1,13 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/tokens.dart';
 import '../../../../routing/routes.dart';
 
-final selectedBottomNavIndexProvider = StateProvider<int>((ref) => 0);
+final selectedBottomNavIndexProvider =
+    NotifierProvider<SelectedNavIndexNotifier, int>(
+        SelectedNavIndexNotifier.new);
+
+class SelectedNavIndexNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void setIndex(int index) => state = index;
+}
 
 class BottomNavItem {
   final String route;
@@ -46,10 +54,10 @@ class BottomNavBar extends ConsumerWidget {
       label: 'Favorites',
     ),
     BottomNavItem(
-      route: AppRoutes.profile,
-      icon: CupertinoIcons.person,
-      activeIcon: CupertinoIcons.person_fill,
-      label: 'Profile',
+      route: AppRoutes.notes,
+      icon: CupertinoIcons.doc_text,
+      activeIcon: CupertinoIcons.doc_text_fill,
+      label: 'Notes',
     ),
     BottomNavItem(
       route: AppRoutes.settings,
@@ -62,47 +70,52 @@ class BottomNavBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(selectedBottomNavIndexProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     _syncWithCurrentRoute(context, ref);
 
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.borderLight, width: 1)),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: isDark ? AppColors.borderDark : AppColors.borderLight,
+            width: 1,
+          ),
+        ),
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex.clamp(0, _navItems.length - 1),
         onTap: (index) => _onTabTapped(context, ref, index),
-        elevation: 8,
+        elevation: 0,
         showUnselectedLabels: true,
-        selectedFontSize: 12,
-        unselectedFontSize: 10,
+        selectedFontSize: 11,
+        unselectedFontSize: 11,
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.textSecondary,
-        backgroundColor: AppColors.backgroundLight,
+        backgroundColor:
+            isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
         items: _navItems.map((item) {
           final index = _navItems.indexOf(item);
           final isSelected = index == currentIndex;
 
-          final iconWidget = Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? AppColors.primary.withAlpha(50)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              isSelected && item.activeIcon != null
-                  ? item.activeIcon
-                  : item.icon,
-              color: isSelected ? AppColors.primary : AppColors.textSecondary,
-              size: 22,
-            ),
-          );
-
           return BottomNavigationBarItem(
-            icon: iconWidget,
+            icon: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.primary.withAlpha(30)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                isSelected && item.activeIcon != null
+                    ? item.activeIcon
+                    : item.icon,
+                color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                size: 22,
+              ),
+            ),
             label: item.label,
             tooltip: item.label,
           );
@@ -112,19 +125,9 @@ class BottomNavBar extends ConsumerWidget {
   }
 
   void _onTabTapped(BuildContext context, WidgetRef ref, int index) {
-    if (index < 0 || index >= _navItems.length) {
-      debugPrint('Invalid bottom nav index: $index');
-      return;
-    }
-
-    try {
-      ref.read(selectedBottomNavIndexProvider.notifier).state = index;
-      final route = _navItems[index].route;
-      context.go(route);
-    } catch (e, stackTrace) {
-      debugPrint('Bottom nav navigation error: $e');
-      debugPrint('Stack trace: $stackTrace');
-    }
+    if (index < 0 || index >= _navItems.length) return;
+    ref.read(selectedBottomNavIndexProvider.notifier).setIndex(index);
+    context.go(_navItems[index].route);
   }
 
   void _syncWithCurrentRoute(BuildContext context, WidgetRef ref) {
@@ -140,8 +143,7 @@ class BottomNavBar extends ConsumerWidget {
       if (currentIndex != routeIndex) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
-            ref.read(selectedBottomNavIndexProvider.notifier).state =
-                routeIndex;
+            ref.read(selectedBottomNavIndexProvider.notifier).setIndex(routeIndex);
           }
         });
       }

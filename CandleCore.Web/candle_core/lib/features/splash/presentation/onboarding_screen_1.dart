@@ -1,30 +1,25 @@
 import 'package:candle_core/shared/widgets/SkipButton/SkipButton.dart';
 import 'package:candle_core/shared/widgets/onboarding/OnboardingIllustration/onboarding_illustration.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/providers/preferences_provider.dart';
 import '../../../core/theme/tokens.dart';
 import '../../../routing/routes.dart';
 import '../../../shared/widgets/onboarding/OnBoardingTextSection/onboarding_text_section.dart';
 import '../../../shared/widgets/onboarding/OnboardingNavigation/onboarding_navigation.dart';
 
-class OnboardingScreen1 extends StatefulWidget {
+class OnboardingScreen1 extends ConsumerWidget {
   const OnboardingScreen1({super.key});
 
   @override
-  State<OnboardingScreen1> createState() => _OnboardingScreen1State();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    Future<void> skipOnboarding() async {
+      await ref.read(preferencesServiceProvider).setOnboardingDone();
+      if (context.mounted) context.go(AppRoutes.login);
+    }
 
-class _OnboardingScreen1State extends State<OnboardingScreen1> {
-  int currentPage = 0;
-  final int totalPages = 3;
-
-  void onNext() {
-    context.go(AppRoutes.onboarding2);
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -34,10 +29,9 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SkipButton(onPressed: () => context.go(AppRoutes.login)),
+                SkipButton(onPressed: skipOnboarding),
               ],
             ),
-
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -56,9 +50,9 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
               ],
             ),
             OnboardingNav(
-              currentPage: currentPage,
-              totalPages: totalPages,
-              onNext: onNext,
+              currentPage: 0,
+              totalPages: 3,
+              onNext: () => context.go(AppRoutes.onboarding2),
             ),
           ],
         ),

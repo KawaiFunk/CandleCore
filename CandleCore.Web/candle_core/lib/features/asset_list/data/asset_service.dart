@@ -7,10 +7,19 @@ import '../../../core/models/paged_list.dart';
 import 'asset_model.dart';
 
 class AssetService {
-  Future<PagedList<AssetModel>> fetchAssets(PagedListFilter filter) async {
-    final baseUrl = Env.get('API_BASE_URL', fallback: 'http://10.0.2.2:5106');
-    final uri = Uri.parse('$baseUrl/api/assets?pageNumber=${filter.pageNumber}&pageSize=${filter.pageSize}');
+  String get _baseUrl => Env.get('API_BASE_URL', fallback: 'http://10.0.2.2:5106');
 
+  Future<PagedList<AssetModel>> fetchAssets(PagedListFilter filter) async {
+    final params = {
+      'pageNumber': '${filter.pageNumber}',
+      'pageSize': '${filter.pageSize}',
+      if (filter.search != null && filter.search!.isNotEmpty)
+        'search': filter.search!,
+    };
+
+    final uri = Uri.parse('$_baseUrl/api/assets').replace(
+      queryParameters: params,
+    );
 
     final response = await http.get(uri);
 
