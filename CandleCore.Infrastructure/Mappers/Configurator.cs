@@ -1,4 +1,5 @@
 ﻿using CandleCore.Infrastructure.Mappers.Asset;
+using CandleCore.Infrastructure.Mappers.User;
 using CandleCore.Mappers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,5 +10,6 @@ public static class Configurator
     public static void AddMappers(this IServiceCollection services)
     {
         services.AddScoped<IAssetMapper, AssetMapper>();
+        services.AddScoped<IUserMapper, UserMapper>();
     }
 }
