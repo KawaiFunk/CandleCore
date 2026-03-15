@@ -365,10 +365,8 @@ class _SearchField extends StatelessWidget {
                 )
               : null,
           filled: false,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.sm,
-            vertical: 0,
-          ),
+          isCollapsed: true,
+          contentPadding: EdgeInsets.zero,
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: OutlineInputBorder(
