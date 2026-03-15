@@ -1,3 +1,4 @@
+using CandleCore.Application.Exceptions;
 using CandleCore.Domain.Entities.User;
 using CandleCore.Infrastructure.Services.Generic;
 using CandleCore.Interfaces.Repositories.Generic;
@@ -15,10 +16,10 @@ public class UserService(
     public async Task<UserModel> RegisterAsync(RegisterRequest request)
     {
         if (await userRepository.UsernameExistsAsync(request.Username))
-            throw new InvalidOperationException("Username already exists.");
+            throw new DuplicateResourceException("User", "username", request.Username);
 
         if (await userRepository.EmailExistsAsync(request.Email))
-            throw new InvalidOperationException("Email already exists.");
+            throw new DuplicateResourceException("User", "email", request.Email);
 
         var entity = new UserEntity
         {
@@ -37,12 +38,12 @@ public class UserService(
         };
     }
 
-    public async Task<UserModel?> LoginAsync(LoginRequest request)
+    public async Task<UserModel> LoginAsync(LoginRequest request)
     {
         var user = await userRepository.GetByUsernameAsync(request.Username);
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password, enhancedEntropy: false))
-            return null;
+            throw new InvalidCredentialsException();
 
         return new UserModel
         {

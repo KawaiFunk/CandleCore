@@ -1,4 +1,5 @@
-﻿using CandleCore.Interfaces.Services.Asset;
+using CandleCore.Application.Exceptions;
+using CandleCore.Interfaces.Services.Asset;
 using CandleCore.Mappers;
 using CandleCore.Models.Asset;
 using MediatR;
@@ -14,28 +15,18 @@ public class GetAssetByIdRequestHandler(
 {
     public async Task<AssetModel> Handle(GetAssetByIdRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            logger.LogInformation("Fetching asset by ID: {Id}", request.Id);
-            var asset = await assetService.GetByIdAsync(request.Id);
+        logger.LogInformation("Fetching asset by ID {Id}", request.Id);
 
-            if (asset == null)
-            {
-                logger.LogWarning("Asset with ID {Id} not found", request.Id);
-                throw new KeyNotFoundException($"Asset with ID {request.Id} not found.");
-            }
+        var asset = await assetService.GetByIdAsync(request.Id);
 
-            return assetMapper.Map(asset);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error fetching asset by ID {Id}", request.Id);
-            throw;
-        }
+        if (asset == null)
+            throw new ResourceNotFoundException(nameof(asset), request.Id);
+
+        return assetMapper.Map(asset);
     }
 }
 
 public class GetAssetByIdRequest(int id) : IRequest<AssetModel>
 {
-    public int Id { get; set; } = id;
+    public int Id { get; } = id;
 }

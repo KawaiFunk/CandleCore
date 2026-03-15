@@ -1,4 +1,4 @@
-﻿using CandleCore.Domain.Common.PagedList;
+using CandleCore.Domain.Common.PagedList;
 using CandleCore.Interfaces.Services.Asset;
 using CandleCore.Mappers;
 using CandleCore.Models.Asset;
@@ -15,22 +15,16 @@ public class GetAllAssetsRequestHandler(
 {
     public async Task<IPagedList<AssetModel>> Handle(GetAllAssetsRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            logger.LogInformation("Fetching all assets paged");
-            var assets = await assetService.GetAllPagedAsync(request.Filter);
+        logger.LogInformation("Fetching all assets — page {Page}, size {Size}",
+            request.Filter.PageNumber, request.Filter.PageSize);
 
-            return assets.ToMappedPaged(assetMapper.Map);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error fetching all assets");
-            throw;
-        }
+        var assets = await assetService.GetAllPagedAsync(request.Filter);
+
+        return assets.ToMappedPaged(assetMapper.Map);
     }
 }
 
 public class GetAllAssetsRequest(PagedListFilter filter) : IRequest<IPagedList<AssetModel>>
 {
-    public PagedListFilter Filter { get; set; } = filter;
+    public PagedListFilter Filter { get; } = filter;
 }

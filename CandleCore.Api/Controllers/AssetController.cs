@@ -1,4 +1,6 @@
-﻿using CandleCore.Domain.Common.PagedList;
+using CandleCore.Api.Errors;
+using CandleCore.Application.Models.Common;
+using CandleCore.Domain.Common.PagedList;
 using CandleCore.Infrastructure.Handlers.Asset;
 using CandleCore.Models.Asset;
 using MediatR;
@@ -12,37 +14,35 @@ public class AssetController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(200, Type = typeof(IPagedList<AssetModel>))]
-    [ProducesResponseType(400)]
+    [ProducesResponseType(400, Type = typeof(ApiErrorModel))]
+    [ProducesResponseType(500, Type = typeof(ApiErrorModel))]
     public async Task<IActionResult> GetAllAsync([FromQuery] PagedListFilter filter)
     {
         try
         {
-            var request  = new GetAllAssetsRequest(filter);
-            var response = await mediator.Send(request);
-
-            return Ok(response);
+            var result = await mediator.Send(new GetAllAssetsRequest(filter));
+            return Ok(result);
         }
         catch (Exception ex)
         {
-            return BadRequest($"An error occurred: {ex.Message}");
+            return ApiErrorBuilder.FromException(ex);
         }
     }
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(200, Type = typeof(AssetModel))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ApiErrorModel))]
+    [ProducesResponseType(500, Type = typeof(ApiErrorModel))]
     public async Task<IActionResult> GetByIdAsync(int id)
     {
         try
         {
-            var request  = new GetAssetByIdRequest(id);
-            var response = await mediator.Send(request);
-
-            return Ok(response);
+            var result = await mediator.Send(new GetAssetByIdRequest(id));
+            return Ok(result);
         }
-        catch (KeyNotFoundException ex)
+        catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            return ApiErrorBuilder.FromException(ex);
         }
     }
 }

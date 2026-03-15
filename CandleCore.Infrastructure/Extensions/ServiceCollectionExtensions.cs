@@ -1,4 +1,5 @@
-﻿using CandleCore.Infrastructure.Clients;
+﻿using CandleCore.Infrastructure.Behaviors;
+using CandleCore.Infrastructure.Clients;
 using CandleCore.Infrastructure.Configurations;
 using CandleCore.Infrastructure.Handlers.Asset;
 using CandleCore.Infrastructure.Mappers;
@@ -8,6 +9,7 @@ using CandleCore.Infrastructure.Persistence.Repositories;
 using CandleCore.Infrastructure.Services;
 using Hangfire;
 using Hangfire.PostgreSql;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,7 +29,10 @@ public static class ServiceCollectionExtensions
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddMediatR(cfg =>
-            cfg.RegisterServicesFromAssemblyContaining<GetAllAssetsRequestHandler>());
+        {
+            cfg.RegisterServicesFromAssemblyContaining<GetAllAssetsRequestHandler>();
+            cfg.AddOpenBehavior(typeof(ExceptionHandlingBehavior<,>));
+        });
         services.AddHangfire(config =>
             config.UsePostgreSqlStorage(configuration.GetConnectionString("DefaultConnection")));
         return services;
