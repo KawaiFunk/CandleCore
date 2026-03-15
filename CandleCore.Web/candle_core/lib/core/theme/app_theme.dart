@@ -46,6 +46,20 @@ class AppTheme {
       ),
     ),
 
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.backgroundLight,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      centerTitle: false,
+      titleTextStyle: TextStyle(
+        color: AppColors.textPrimary,
+        fontSize: AppTypography.textLg,
+        fontWeight: AppTypography.fontWeightBold,
+      ),
+      iconTheme: IconThemeData(color: AppColors.textPrimary),
+    ),
+
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.inputBackgroundLight,
@@ -127,6 +141,20 @@ class AppTheme {
         fontWeight: AppTypography.fontWeightMedium,
         color: AppColors.textLight,
       ),
+    ),
+
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.backgroundDark,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      centerTitle: false,
+      titleTextStyle: TextStyle(
+        color: AppColors.textLight,
+        fontSize: AppTypography.textLg,
+        fontWeight: AppTypography.fontWeightBold,
+      ),
+      iconTheme: IconThemeData(color: AppColors.textLight),
     ),
 
     inputDecorationTheme: InputDecorationTheme(
