@@ -1,12 +1,16 @@
 ﻿using CandleCore.Infrastructure.Persistence.Repositories.Asset;
+using CandleCore.Infrastructure.Persistence.Repositories.DeviceToken;
 using CandleCore.Infrastructure.Persistence.Repositories.Favorite;
 using CandleCore.Infrastructure.Persistence.Repositories.Generic;
 using CandleCore.Infrastructure.Persistence.Repositories.Note;
+using CandleCore.Infrastructure.Persistence.Repositories.Trigger;
 using CandleCore.Infrastructure.Persistence.Repositories.User;
 using CandleCore.Interfaces.Repositories.Asset;
+using CandleCore.Interfaces.Repositories.DeviceToken;
 using CandleCore.Interfaces.Repositories.Favorite;
 using CandleCore.Interfaces.Repositories.Generic;
 using CandleCore.Interfaces.Repositories.Note;
+using CandleCore.Interfaces.Repositories.Trigger;
 using CandleCore.Interfaces.Repositories.User;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,5 +25,7 @@ public static class Configurator
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IFavoriteRepository, FavoriteRepository>();
         services.AddScoped<INoteRepository, NoteRepository>();
+        services.AddScoped<ITriggerRepository, TriggerRepository>();
+        services.AddScoped<IDeviceTokenRepository, DeviceTokenRepository>();
     }
 }

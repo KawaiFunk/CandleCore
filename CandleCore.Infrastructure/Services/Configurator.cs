@@ -2,12 +2,14 @@
 using CandleCore.Infrastructure.Services.Favorite;
 using CandleCore.Infrastructure.Services.Generic;
 using CandleCore.Infrastructure.Services.Note;
+using CandleCore.Infrastructure.Services.Trigger;
 using CandleCore.Infrastructure.Services.User;
 using CandleCore.Interfaces.Services;
 using CandleCore.Interfaces.Services.Asset;
 using CandleCore.Interfaces.Services.Favorite;
 using CandleCore.Interfaces.Services.Generic;
 using CandleCore.Interfaces.Services.Note;
+using CandleCore.Interfaces.Services.Trigger;
 using CandleCore.Interfaces.Services.User;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,5 +25,6 @@ public static class Configurator
         services.AddScoped<ICryptService, CryptService>();
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<INoteService, NoteService>();
+        services.AddScoped<ITriggerService, TriggerService>();
     }
 }

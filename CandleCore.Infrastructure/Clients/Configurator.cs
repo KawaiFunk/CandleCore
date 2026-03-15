@@ -1,4 +1,5 @@
 ﻿using CandleCore.Infrastructure.Clients.Coinlore;
+using CandleCore.Infrastructure.Clients.Fcm;
 using CandleCore.Infrastructure.Options.Coinlore;
 using CandleCore.Interfaces.Clients;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,5 +18,8 @@ public static class Configurator
             client.BaseAddress = new Uri(options.BaseUrl);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
         });
+
+        services.AddHttpClient("fcm");
+        services.AddScoped<IFcmClient, FcmClient>();
     }
 }

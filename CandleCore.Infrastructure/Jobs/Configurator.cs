@@ -1,4 +1,5 @@
-﻿using CandleCore.Infrastructure.Jobs.Asset;
+﻿using CandleCore.Infrastructure.Jobs.Alarm;
+using CandleCore.Infrastructure.Jobs.Asset;
 using CandleCore.Interfaces.Jobs;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,5 +10,6 @@ public static class Configurator
     public static void AddJobs(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IAssetSyncJob, AssetSyncJob>();
+        serviceCollection.AddScoped<IAlarmCheckJob, AlarmCheckJob>();
     }
 }

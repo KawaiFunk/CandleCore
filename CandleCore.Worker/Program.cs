@@ -33,6 +33,11 @@ using (var scope = host.Services.CreateScope())
         "SyncAssetsJob",
         job => job.SyncAssetsAsync(),
         Cron.Minutely);
+
+    recurringJobs.AddOrUpdate<IAlarmCheckJob>(
+        "CheckAlarmsJob",
+        job => job.CheckAlarmsAsync(),
+        Cron.Minutely);
 }
 
 await host.RunAsync();

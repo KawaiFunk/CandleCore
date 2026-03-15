@@ -6,4 +6,5 @@ public static class DatabaseSchemas
     public const string Users     = "users";
     public const string Favorites = "favorites";
     public const string Notes     = "notes";
+    public const string Triggers  = "triggers";
 }

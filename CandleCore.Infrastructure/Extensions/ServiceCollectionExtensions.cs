@@ -7,6 +7,8 @@ using CandleCore.Infrastructure.Options;
 using CandleCore.Infrastructure.Persistence;
 using CandleCore.Infrastructure.Persistence.Repositories;
 using CandleCore.Infrastructure.Services;
+using CandleCore.Infrastructure.Validators.Trigger;
+using FluentValidation;
 using Hangfire;
 using Hangfire.PostgreSql;
 using MediatR;
@@ -28,9 +30,11 @@ public static class ServiceCollectionExtensions
         services.AddDbContextConfiguration(configuration.GetConnectionString("DefaultConnection"));
         services.AddControllers();
         services.AddEndpointsApiExplorer();
+        services.AddValidatorsFromAssemblyContaining<CreateTriggerRequestValidator>();
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblyContaining<GetAllAssetsRequestHandler>();
+            cfg.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
             cfg.AddOpenBehavior(typeof(ExceptionHandlingBehavior<,>));
         });
         services.AddHangfire(config =>

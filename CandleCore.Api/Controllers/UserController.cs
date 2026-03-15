@@ -4,6 +4,7 @@ using CandleCore.Models.Common;
 using CandleCore.Models.User;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RegisterDeviceTokenRequest = CandleCore.Infrastructure.Handlers.User.RegisterDeviceTokenRequest;
 
 namespace CandleCore.Api.Controllers;
 
@@ -38,6 +39,22 @@ public class UserController(IMediator mediator) : ControllerBase
         {
             var user = await mediator.Send(new LoginUserRequest(request));
             return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return ApiErrorBuilder.FromException(ex);
+        }
+    }
+
+    [HttpPost("{userId:int}/device-token")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(500, Type = typeof(ApiErrorModel))]
+    public async Task<IActionResult> RegisterDeviceTokenAsync(int userId, [FromBody] RegisterDeviceTokenModel model)
+    {
+        try
+        {
+            await mediator.Send(new RegisterDeviceTokenRequest(userId, model.Token));
+            return NoContent();
         }
         catch (Exception ex)
         {
