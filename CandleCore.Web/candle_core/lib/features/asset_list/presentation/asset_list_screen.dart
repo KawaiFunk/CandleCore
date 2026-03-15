@@ -329,51 +329,53 @@ class _SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 44,
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
       decoration: BoxDecoration(
         color: isDark ? AppColors.inputBackgroundDark : AppColors.inputBackgroundLight,
         borderRadius: BorderRadius.circular(AppRadii.lg),
       ),
-      child: TextField(
-        controller: controller,
-        onChanged: onChanged,
-        style: TextStyle(
-          fontSize: AppTypography.textSm,
-          color: isDark ? AppColors.textLight : AppColors.textPrimary,
-        ),
-        decoration: InputDecoration(
-          hintText: 'Search coins...',
-          hintStyle: const TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: AppTypography.textSm,
+      child: Row(
+        children: [
+          const Icon(Icons.search_rounded,
+              color: AppColors.textSecondary, size: 18),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              onChanged: onChanged,
+              style: TextStyle(
+                fontSize: AppTypography.textSm,
+                color: isDark ? AppColors.textLight : AppColors.textPrimary,
+              ),
+              decoration: InputDecoration(
+                hintText: 'Search coins...',
+                hintStyle: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: AppTypography.textSm,
+                ),
+                suffixIcon: controller.text.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () {
+                          controller.clear();
+                          onChanged('');
+                        },
+                        child: const Icon(Icons.close_rounded,
+                            color: AppColors.textSecondary, size: 16),
+                      )
+                    : null,
+                filled: false,
+                isCollapsed: true,
+                contentPadding: EdgeInsets.zero,
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadii.lg),
+                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                ),
+              ),
+            ),
           ),
-          prefixIcon: const Icon(
-            Icons.search_rounded,
-            color: AppColors.textSecondary,
-            size: 18,
-          ),
-          suffixIcon: controller.text.isNotEmpty
-              ? GestureDetector(
-                  onTap: () {
-                    controller.clear();
-                    onChanged('');
-                  },
-                  child: const Icon(
-                    Icons.close_rounded,
-                    color: AppColors.textSecondary,
-                    size: 16,
-                  ),
-                )
-              : null,
-          filled: false,
-          isCollapsed: true,
-          contentPadding: EdgeInsets.zero,
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppRadii.lg),
-            borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-          ),
-        ),
+        ],
       ),
     );
   }
