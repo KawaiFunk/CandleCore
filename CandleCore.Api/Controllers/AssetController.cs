@@ -16,7 +16,7 @@ public class AssetController(IMediator mediator) : ControllerBase
     [ProducesResponseType(200, Type = typeof(IPagedList<AssetModel>))]
     [ProducesResponseType(400, Type = typeof(ApiErrorModel))]
     [ProducesResponseType(500, Type = typeof(ApiErrorModel))]
-    public async Task<IActionResult> GetAllAsync([FromQuery] PagedListFilter filter)
+    public async Task<IActionResult> GetAllAsync([FromQuery] AssetFilter filter)
     {
         try
         {

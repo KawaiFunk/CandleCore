@@ -15,8 +15,8 @@ public class GetAllAssetsRequestHandler(
 {
     public async Task<IPagedList<AssetModel>> Handle(GetAllAssetsRequest request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Fetching all assets — page {Page}, size {Size}",
-            request.Filter.PageNumber, request.Filter.PageSize);
+        logger.LogInformation("Fetching assets — page {Page}, size {Size}, sort {Sort}, desc {Desc}",
+            request.Filter.PageNumber, request.Filter.PageSize, request.Filter.SortBy, request.Filter.Descending);
 
         var assets = await assetService.GetAllPagedAsync(request.Filter);
 
@@ -24,7 +24,7 @@ public class GetAllAssetsRequestHandler(
     }
 }
 
-public class GetAllAssetsRequest(PagedListFilter filter) : IRequest<IPagedList<AssetModel>>
+public class GetAllAssetsRequest(AssetFilter filter) : IRequest<IPagedList<AssetModel>>
 {
-    public PagedListFilter Filter { get; } = filter;
+    public AssetFilter Filter { get; } = filter;
 }

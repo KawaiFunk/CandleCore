@@ -1,10 +1,11 @@
-﻿using CandleCore.Domain.Common.PagedList;
+using CandleCore.Domain.Common.PagedList;
 using CandleCore.Domain.Entities.Asset;
 using CandleCore.Infrastructure.Services.Generic;
 using CandleCore.Interfaces.Repositories.Asset;
 using CandleCore.Interfaces.Repositories.Generic;
 using CandleCore.Interfaces.Services.Asset;
 using CandleCore.Mappers;
+using CandleCore.Models.Asset;
 
 namespace CandleCore.Infrastructure.Services.Asset;
 
@@ -34,7 +35,7 @@ public class AssetService(
         await assetRepository.BulkUpsertAsync(entities);
     }
 
-    public new async Task<IPagedList<AssetEntity>> GetAllPagedAsync(PagedListFilter filter)
+    public async Task<IPagedList<AssetEntity>> GetAllPagedAsync(AssetFilter filter)
     {
         return await assetRepository.GetAllPagedAsync(filter);
     }
