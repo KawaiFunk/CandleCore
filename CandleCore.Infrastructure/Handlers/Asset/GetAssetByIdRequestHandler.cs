@@ -27,9 +27,9 @@ public class GetAssetByIdRequestHandler(
 
             return assetMapper.Map(asset);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
+            logger.LogError(ex, "Error fetching asset by ID {Id}", request.Id);
             throw;
         }
     }

@@ -24,7 +24,7 @@ public class GetAllAssetsRequestHandler(
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            logger.LogError(ex, "Error fetching all assets");
             throw;
         }
     }

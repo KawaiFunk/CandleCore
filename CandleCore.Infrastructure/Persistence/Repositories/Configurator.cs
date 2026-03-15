@@ -1,7 +1,9 @@
 ﻿using CandleCore.Infrastructure.Persistence.Repositories.Asset;
 using CandleCore.Infrastructure.Persistence.Repositories.Generic;
+using CandleCore.Infrastructure.Persistence.Repositories.User;
 using CandleCore.Interfaces.Repositories.Asset;
 using CandleCore.Interfaces.Repositories.Generic;
+using CandleCore.Interfaces.Repositories.User;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CandleCore.Infrastructure.Persistence.Repositories;
@@ -12,5 +14,6 @@ public static class Configurator
     {
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IAssetRepository, AssetRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 }

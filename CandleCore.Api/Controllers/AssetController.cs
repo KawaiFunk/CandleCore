@@ -28,7 +28,7 @@ public class AssetController(IMediator mediator) : ControllerBase
         }
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet("{id:int}")]
     [ProducesResponseType(200, Type = typeof(AssetModel))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetByIdAsync(int id)
@@ -40,9 +40,9 @@ public class AssetController(IMediator mediator) : ControllerBase
 
             return Ok(response);
         }
-        catch (Exception ex)
+        catch (KeyNotFoundException ex)
         {
-            return BadRequest($"An error occurred: {ex.Message}");
+            return NotFound(ex.Message);
         }
     }
 }
