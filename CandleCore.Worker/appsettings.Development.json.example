@@ -1,0 +1,14 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=candle_core;Username=postgres;Password=postgres;Pooling=true;SSL Mode=Prefer;"
+  },
+  "Coinlore": {
+    "ApiKey": "your-api-key-here",
+    "BaseUrl": "https://api.coinlore.net/api/",
+    "TickerLimit": 100
+  },
+  "Fcm": {
+    "ProjectId": "your-firebase-project-id",
+    "ServiceAccountJson": "{\"type\":\"service_account\",\"project_id\":\"your-project-id\", ... }"
+  }
+}

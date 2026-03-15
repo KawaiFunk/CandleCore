@@ -471,6 +471,10 @@ doc/api/
 # dotenv environment variables file
 .env
 
+### Secrets ###
+appsettings.Development.json
+firebase_options.dart
+
 ### DotnetCore ###
 # .NET Core build folders
 bin/
