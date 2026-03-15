@@ -2,6 +2,8 @@
 
 public static class DatabaseTables
 {
-    public const string Assets = "asset";
-    public const string Users  = "user";
+    public const string Assets        = "asset";
+    public const string Users         = "user";
+    public const string UserFavorites = "user_favorite";
+    public const string Notes         = "note";
 }

@@ -17,7 +17,7 @@ class AssetListItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isFavorite = ref.watch(
-      favoritesProvider.select((s) => s.contains(asset.symbol)),
+      favoritesProvider.select((s) => s.containsId(asset.id)),
     );
     final isPositive = asset.percentChange1h >= 0;
     final changeColor = isPositive ? AppColors.primary : AppColors.error;
@@ -111,10 +111,10 @@ class AssetListItem extends ConsumerWidget {
           const SizedBox(width: AppSpacing.sm),
           GestureDetector(
             onTap: () =>
-                ref.read(favoritesProvider.notifier).toggle(asset.symbol),
+                ref.read(favoritesProvider.notifier).toggle(asset.id),
             child: Icon(
               isFavorite ? Icons.star_rounded : Icons.star_border_rounded,
-              color: isFavorite ? AppColors.primary : AppColors.textSecondary,
+              color: isFavorite ? Colors.amber : AppColors.textSecondary,
               size: 22,
             ),
           ),

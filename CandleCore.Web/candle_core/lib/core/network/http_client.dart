@@ -15,6 +15,12 @@ class ApiHttpClient {
     return _handle(response);
   }
 
+  Future<dynamic> delete(String path) async {
+    final uri = Uri.parse('$baseUrl$path');
+    final response = await http.delete(uri, headers: _headers());
+    return _handle(response);
+  }
+
   Future<dynamic> post(String path, {required Map<String, dynamic> body}) async {
     final uri = Uri.parse('$baseUrl$path');
     final response = await http.post(

@@ -2,6 +2,8 @@
 
 public static class DatabaseSchemas
 {
-    public const string Assets = "assets";
-    public const string Users  = "users";
+    public const string Assets    = "assets";
+    public const string Users     = "users";
+    public const string Favorites = "favorites";
+    public const string Notes     = "notes";
 }
