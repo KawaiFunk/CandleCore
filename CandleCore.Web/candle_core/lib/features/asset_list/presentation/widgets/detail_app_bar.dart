@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/tokens.dart';
 import '../../../../shared/widgets/asset/asset_illustration/asset_illustration.dart';
-import '../../data/asset_model.dart';
+import '../../data/detailed_asset_model.dart';
 import 'rank_badge.dart';
 
 class DetailAppBar extends StatelessWidget {

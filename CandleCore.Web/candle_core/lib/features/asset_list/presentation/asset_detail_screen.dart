@@ -6,7 +6,7 @@ import '../../../core/theme/tokens.dart';
 import '../../../features/favorites/providers/favorites_provider.dart';
 import '../../../features/notes/presentation/widgets/quick_note_sheet.dart';
 import '../../../features/notes/providers/notes_provider.dart';
-import '../data/asset_model.dart';
+import '../data/detailed_asset_model.dart';
 import '../providers/asset_provider.dart';
 import 'widgets/change_section.dart';
 import 'widgets/detail_app_bar.dart';
@@ -40,7 +40,11 @@ class AssetDetailScreen extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                const Icon(
+                  Icons.error_outline,
+                  size: 48,
+                  color: AppColors.error,
+                ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
                   err is ApiException ? err.message : 'Failed to load asset.',
@@ -50,8 +54,10 @@ class AssetDetailScreen extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.md),
                 TextButton(
                   onPressed: () => ref.invalidate(assetDetailProvider(assetId)),
-                  child: const Text('Retry',
-                      style: TextStyle(color: AppColors.primary)),
+                  child: const Text(
+                    'Retry',
+                    style: TextStyle(color: AppColors.primary),
+                  ),
                 ),
               ],
             ),
@@ -80,11 +86,9 @@ class _DetailViewState extends ConsumerState<_DetailView> {
       builder: (_) => QuickNoteSheet(
         asset: widget.asset,
         onSave: (title, body) async {
-          await ref.read(notesProvider.notifier).create(
-                title: title,
-                body: body,
-                assetId: widget.asset.id,
-              );
+          await ref
+              .read(notesProvider.notifier)
+              .create(title: title, body: body, assetId: widget.asset.id);
         },
       ),
     );
@@ -118,7 +122,11 @@ class _DetailViewState extends ConsumerState<_DetailView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PriceHeader(asset: widget.asset, changeColor: changeColor, isPositive: isPositive),
+                  PriceHeader(
+                    asset: widget.asset,
+                    changeColor: changeColor,
+                    isPositive: isPositive,
+                  ),
                   const SizedBox(height: AppSpacing.lg),
                   StatsGrid(asset: widget.asset, isDark: isDark),
                   const SizedBox(height: AppSpacing.lg),

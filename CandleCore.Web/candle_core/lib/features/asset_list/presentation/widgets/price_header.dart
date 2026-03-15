@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/tokens.dart';
-import '../../data/asset_model.dart';
+import '../../data/detailed_asset_model.dart';
 
 class PriceHeader extends StatelessWidget {
   final DetailedAssetModel asset;
@@ -89,7 +89,9 @@ class PriceHeader extends StatelessWidget {
 
   String _formatPrice(double price) {
     if (price >= 1000) {
-      return price.toStringAsFixed(0).replaceAllMapped(
+      return price
+          .toStringAsFixed(0)
+          .replaceAllMapped(
             RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
             (m) => '${m[1]},',
           );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/tokens.dart';
 import '../../../asset_list/data/asset_model.dart';
+import '../../../asset_list/data/detailed_asset_model.dart';
 import 'note_text_field.dart';
 import 'sheet_actions.dart';
 

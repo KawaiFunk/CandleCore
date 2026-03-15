@@ -4,6 +4,7 @@ import '../../../core/config/constants.dart';
 import '../../../core/models/paged_list.dart';
 import '../data/asset_model.dart';
 import '../data/asset_service.dart';
+import '../data/detailed_asset_model.dart';
 
 final assetServiceProvider = Provider((ref) => AssetService());
 
@@ -12,7 +13,7 @@ final autoRefreshProvider = StreamProvider<DateTime>((ref) {
 });
 
 final assetRefreshProvider =
-    NotifierProvider<AssetRefreshNotifier, int>(AssetRefreshNotifier.new);
+NotifierProvider<AssetRefreshNotifier, int>(AssetRefreshNotifier.new);
 
 class AssetRefreshNotifier extends Notifier<int> {
   @override
@@ -81,33 +82,33 @@ class AssetListFilter {
   @override
   bool operator ==(Object other) =>
       other is AssetListFilter &&
-      other.page == page &&
-      other.pageSize == pageSize &&
-      other.search == search &&
-      other.sortBy == sortBy &&
-      other.sortDirection == sortDirection &&
-      other.changeFilter == changeFilter &&
-      other.priceMin == priceMin &&
-      other.priceMax == priceMax;
+          other.page == page &&
+          other.pageSize == pageSize &&
+          other.search == search &&
+          other.sortBy == sortBy &&
+          other.sortDirection == sortDirection &&
+          other.changeFilter == changeFilter &&
+          other.priceMin == priceMin &&
+          other.priceMax == priceMax;
 
   @override
   int get hashCode => Object.hash(
-        page,
-        pageSize,
-        search,
-        sortBy,
-        sortDirection,
-        changeFilter,
-        priceMin,
-        priceMax,
-      );
+    page,
+    pageSize,
+    search,
+    sortBy,
+    sortDirection,
+    changeFilter,
+    priceMin,
+    priceMax,
+  );
 }
 
 const _sentinel = Object();
 
 final assetListFilterProvider =
-    NotifierProvider<AssetListFilterNotifier, AssetListFilter>(
-        AssetListFilterNotifier.new);
+NotifierProvider<AssetListFilterNotifier, AssetListFilter>(
+    AssetListFilterNotifier.new);
 
 class AssetListFilterNotifier extends Notifier<AssetListFilter> {
   @override
@@ -167,23 +168,23 @@ class AssetListFilterNotifier extends Notifier<AssetListFilter> {
 }
 
 final assetDetailProvider =
-    FutureProvider.family<DetailedAssetModel, int>((ref, id) async {
+FutureProvider.family<DetailedAssetModel, int>((ref, id) async {
   final service = ref.watch(assetServiceProvider);
   return service.fetchAssetById(id);
 });
 
 final pagedAssetListProvider =
-    FutureProvider.family<PagedList<AssetModel>, AssetListFilter>(
+FutureProvider.family<PagedList<AssetModel>, AssetListFilter>(
         (ref, filter) async {
-  ref.watch(autoRefreshProvider);
-  ref.watch(assetRefreshProvider);
+      ref.watch(autoRefreshProvider);
+      ref.watch(assetRefreshProvider);
 
-  final service = ref.watch(assetServiceProvider);
-  return service.fetchAssets(filter);
-});
+      final service = ref.watch(assetServiceProvider);
+      return service.fetchAssets(filter);
+    });
 
 final refreshableAssetListProvider =
-    FutureProvider.family<PagedList<AssetModel>, int>((ref, page) async {
+FutureProvider.family<PagedList<AssetModel>, int>((ref, page) async {
   ref.watch(autoRefreshProvider);
   ref.watch(assetRefreshProvider);
 

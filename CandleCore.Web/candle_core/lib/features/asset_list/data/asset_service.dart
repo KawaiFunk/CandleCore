@@ -3,6 +3,7 @@ import '../../../core/models/paged_list.dart';
 import '../../../core/network/http_client.dart';
 import '../providers/asset_provider.dart';
 import 'asset_model.dart';
+import 'detailed_asset_model.dart';
 
 class AssetService {
   late final ApiHttpClient _client;
@@ -34,21 +35,21 @@ class AssetService {
     final json = await _client.get('/api/assets', queryParams: params);
     return PagedList.fromJson(
       json as Map<String, dynamic>,
-      (e) => AssetModel.fromJson(e as Map<String, dynamic>),
+      (e) => AssetModel.fromJson(e),
     );
   }
 
   String _sortFieldName(AssetSortField field) => switch (field) {
-        AssetSortField.rank => 'Rank',
-        AssetSortField.price => 'Price',
-        AssetSortField.change => 'Change1h',
-        AssetSortField.name => 'Name',
-        AssetSortField.marketcap => 'MarketCap',
-      };
+    AssetSortField.rank => 'Rank',
+    AssetSortField.price => 'Price',
+    AssetSortField.change => 'Change1h',
+    AssetSortField.name => 'Name',
+    AssetSortField.marketcap => 'MarketCap',
+  };
 
   String _changeFilterName(AssetChangeFilter filter) => switch (filter) {
-        AssetChangeFilter.gainers => 'Gainers',
-        AssetChangeFilter.losers => 'Losers',
-        AssetChangeFilter.all => 'All',
-      };
+    AssetChangeFilter.gainers => 'Gainers',
+    AssetChangeFilter.losers => 'Losers',
+    AssetChangeFilter.all => 'All',
+  };
 }

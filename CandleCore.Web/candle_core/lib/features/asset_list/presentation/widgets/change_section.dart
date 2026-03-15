@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/tokens.dart';
-import '../../data/asset_model.dart';
+import '../../data/detailed_asset_model.dart';
 import 'change_row.dart';
 import 'detail_divider.dart';
 import 'stat_card.dart';
