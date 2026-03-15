@@ -11,9 +11,9 @@ public class GetAssetByIdRequestHandler(
     ILogger<GetAssetByIdRequestHandler> logger,
     IAssetService                       assetService,
     IAssetMapper                        assetMapper)
-    : IRequestHandler<GetAssetByIdRequest, AssetModel>
+    : IRequestHandler<GetAssetByIdRequest, DetailedAssetModel>
 {
-    public async Task<AssetModel> Handle(GetAssetByIdRequest request, CancellationToken cancellationToken)
+    public async Task<DetailedAssetModel> Handle(GetAssetByIdRequest request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Fetching asset by ID {Id}", request.Id);
 
@@ -22,11 +22,11 @@ public class GetAssetByIdRequestHandler(
         if (asset == null)
             throw new ResourceNotFoundException(nameof(asset), request.Id);
 
-        return assetMapper.Map(asset);
+        return assetMapper.MapDetailed(asset);
     }
 }
 
-public class GetAssetByIdRequest(int id) : IRequest<AssetModel>
+public class GetAssetByIdRequest(int id) : IRequest<DetailedAssetModel>
 {
     public int Id { get; } = id;
 }

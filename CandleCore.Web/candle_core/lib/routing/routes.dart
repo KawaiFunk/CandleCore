@@ -5,8 +5,11 @@ class AppRoutes {
   static const onboarding3 = '/onboarding3';
   static const login = '/login';
   static const markets = '/markets';
+  static const assetDetail = '/markets/:id';
   static const dashboard = '/dashboard';
   static const favorites = '/favorites';
   static const notes = '/notes';
   static const settings = '/settings';
+
+  static String assetDetailPath(int id) => '/markets/$id';
 }

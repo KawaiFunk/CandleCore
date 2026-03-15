@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/tokens.dart';
 import '../../../../features/asset_list/data/asset_model.dart';
 import '../../../../features/favorites/providers/favorites_provider.dart';
+import '../../../../routing/routes.dart';
 import '../asset_illustration/asset_illustration.dart';
 
 class AssetListItem extends ConsumerWidget {
@@ -20,7 +22,9 @@ class AssetListItem extends ConsumerWidget {
     final isPositive = asset.percentChange1h >= 0;
     final changeColor = isPositive ? AppColors.primary : AppColors.error;
 
-    return Container(
+    return GestureDetector(
+      onTap: () => context.push(AppRoutes.assetDetailPath(asset.id)),
+      child: Container(
       decoration: BoxDecoration(
         border: Border.all(
           color: isDark ? AppColors.borderDark : AppColors.borderLight,
@@ -116,6 +120,7 @@ class AssetListItem extends ConsumerWidget {
           ),
         ],
       ),
+    ),
     );
   }
 

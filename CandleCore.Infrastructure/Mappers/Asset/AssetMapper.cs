@@ -17,6 +17,24 @@ public class AssetMapper : IAssetMapper
         };
     }
 
+    public DetailedAssetModel MapDetailed(AssetEntity entity)
+    {
+        return new DetailedAssetModel
+        {
+            Id               = entity.Id,
+            Name             = entity.Name,
+            Symbol           = entity.Symbol,
+            Rank             = entity.Rank,
+            PriceUsd         = entity.PriceUsd,
+            PriceBtc         = entity.PriceBtc,
+            MarketCapUsd     = entity.MarketCapUsd,
+            Volume24a        = entity.Volume24a,
+            PercentChange1h  = entity.PercentChange1h,
+            PercentChange24h = entity.PercentChange24h,
+            PercentChange7d  = entity.PercentChange7d,
+        };
+    }
+
     public AssetEntity ToEntity(CoinloreAssetModel model)
     {
         return new AssetEntity

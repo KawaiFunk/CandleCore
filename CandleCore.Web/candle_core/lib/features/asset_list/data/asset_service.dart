@@ -13,6 +13,11 @@ class AssetService {
     );
   }
 
+  Future<DetailedAssetModel> fetchAssetById(int id) async {
+    final json = await _client.get('/api/assets/$id');
+    return DetailedAssetModel.fromJson(json as Map<String, dynamic>);
+  }
+
   Future<PagedList<AssetModel>> fetchAssets(AssetListFilter filter) async {
     final params = <String, String>{
       'pageNumber': '${filter.page}',

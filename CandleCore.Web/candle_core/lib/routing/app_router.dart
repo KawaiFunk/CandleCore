@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/providers/preferences_provider.dart';
+import '../features/asset_list/presentation/asset_detail_screen.dart';
 import '../features/asset_list/presentation/asset_list_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/splash/presentation/onboarding_screen_1.dart';
@@ -85,6 +86,15 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.markets,
             builder: (context, state) => const AssetListScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) {
+                  final id = int.parse(state.pathParameters['id']!);
+                  return AssetDetailScreen(assetId: id);
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.favorites,

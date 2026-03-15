@@ -30,7 +30,7 @@ public class AssetController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    [ProducesResponseType(200, Type = typeof(AssetModel))]
+    [ProducesResponseType(200, Type = typeof(DetailedAssetModel))]
     [ProducesResponseType(404, Type = typeof(ApiErrorModel))]
     [ProducesResponseType(500, Type = typeof(ApiErrorModel))]
     public async Task<IActionResult> GetByIdAsync(int id)

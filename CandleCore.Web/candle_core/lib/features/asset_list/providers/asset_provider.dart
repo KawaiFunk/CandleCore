@@ -166,6 +166,12 @@ class AssetListFilterNotifier extends Notifier<AssetListFilter> {
   }
 }
 
+final assetDetailProvider =
+    FutureProvider.family<DetailedAssetModel, int>((ref, id) async {
+  final service = ref.watch(assetServiceProvider);
+  return service.fetchAssetById(id);
+});
+
 final pagedAssetListProvider =
     FutureProvider.family<PagedList<AssetModel>, AssetListFilter>(
         (ref, filter) async {

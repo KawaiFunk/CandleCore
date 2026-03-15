@@ -5,30 +5,31 @@ class AssetIllustration extends StatelessWidget {
   final String text;
   final Color backgroundColor;
   final Color iconColor;
+  final double size;
 
   const AssetIllustration({
     required this.text,
     required this.backgroundColor,
     required this.iconColor,
+    this.size = 50,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
-      width: 50,
+      height: size,
+      width: size,
       alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
       decoration: BoxDecoration(color: backgroundColor, shape: BoxShape.circle),
       child: Text(
-        text.substring(0, 2),
+        text.length >= 2 ? text.substring(0, 2) : text,
         style: TextStyle(
           color: iconColor,
-          fontSize: 18,
+          fontSize: size * 0.34,
           fontWeight: AppTypography.fontWeightExtraBold,
         ),
-        textAlign: TextAlign.center
+        textAlign: TextAlign.center,
       ),
     );
   }
