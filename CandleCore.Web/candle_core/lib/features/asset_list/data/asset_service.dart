@@ -8,8 +8,8 @@ import 'asset_model.dart';
 
 class AssetService {
   Future<PagedList<AssetModel>> fetchAssets(PagedListFilter filter) async {
-    final baseUrl = Env.get('API_BASE_URL');
-    final uri = Uri.parse('http://10.0.2.2:5000/api/assets?pageNumber=1&pageSize=20');
+    final baseUrl = Env.get('API_BASE_URL', fallback: 'http://10.0.2.2:5106');
+    final uri = Uri.parse('$baseUrl/api/assets?pageNumber=${filter.pageNumber}&pageSize=${filter.pageSize}');
 
 
     final response = await http.get(uri);
